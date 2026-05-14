@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bécquer: El Vórtice de las Sombras | 10 Leyendas</title>
-    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
-    <link href="[https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap](https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap)" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -71,8 +71,11 @@
         .book-spine { width: 50px; height: 100%; background: linear-gradient(to right, #0a0704, #2a1d12, #0a0704); border-left: 2px solid #000; border-right: 2px solid #000; z-index: 10; box-shadow: 0 0 20px rgba(0,0,0,0.8); }
         .book-page {
             flex: 1; height: 96%; margin: 1%; background: var(--parchment); color: var(--ink);
-            padding: 40px 50px; overflow-y: auto; position: relative;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="200" height="200" opacity="0.05"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3"/></filter><rect width="200" height="200" filter="url(%23n)"/></svg>');
+            padding: 20px 30px; overflow-y: auto; position: relative;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" opacity="0.05"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3"/></filter><rect width="200" height="200" filter="url(%23n)"/></svg>');
+        }
+        @media (min-width: 768px) {
+            .book-page { padding: 40px 50px; }
         }
         .book-page.left-page { border-radius: 8px 2px 2px 8px; box-shadow: inset -25px 0 40px rgba(0,0,0,0.15); }
         .book-page.right-page { border-radius: 2px 8px 8px 2px; box-shadow: inset 25px 0 40px rgba(0,0,0,0.15); }
@@ -86,19 +89,22 @@
 
         .gothic-input {
             background: transparent; border: none; border-bottom: 2px solid var(--blood-red);
-            color: var(--moonlight); font-family: 'Cinzel Decorative'; font-size: 1.8rem;
+            color: var(--moonlight); font-family: 'Cinzel Decorative'; font-size: 1.5rem;
             text-align: center; text-transform: uppercase; outline: none; width: 100%;
-            letter-spacing: 4px; transition: border-color 0.3s;
+            letter-spacing: 2px; transition: border-color 0.3s;
         }
+        @media (min-width: 768px) { .gothic-input { font-size: 1.8rem; letter-spacing: 4px; } }
         .gothic-input:focus { border-color: var(--gold-trim); }
 
         #fx-canvas { position: absolute; inset: 0; pointer-events: none; z-index: 10; opacity: 0.8; }
         .scanlines { position: absolute; inset: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); background-size: 100% 4px, 3px 100%; pointer-events: none; opacity: 0.15; z-index: 50; }
         
         /* Órgano */
-        .organ-key { width: 45px; height: 200px; background: #fdfdfd; border: 1px solid #999; border-radius: 0 0 6px 6px; display: inline-block; margin: 0 1px; cursor: pointer; box-shadow: 0 5px 5px rgba(0,0,0,0.3); transition: all 0.1s; position: relative; z-index: 1; }
+        .organ-key { width: 35px; height: 160px; background: #fdfdfd; border: 1px solid #999; border-radius: 0 0 6px 6px; display: inline-block; margin: 0 1px; cursor: pointer; box-shadow: 0 5px 5px rgba(0,0,0,0.3); transition: all 0.1s; position: relative; z-index: 1; }
+        @media (min-width: 768px) { .organ-key { width: 45px; height: 200px; } }
         .organ-key:active, .organ-key.active { background: #e0e0e0; transform: translateY(4px); box-shadow: 0 2px 2px rgba(0,0,0,0.3); }
-        .organ-key.black { width: 28px; height: 130px; background: #1a1a1a; border: 1px solid #000; margin-left: -15px; margin-right: -15px; z-index: 2; position: relative; vertical-align: top; }
+        .organ-key.black { width: 22px; height: 100px; background: #1a1a1a; border: 1px solid #000; margin-left: -12px; margin-right: -12px; z-index: 2; position: relative; vertical-align: top; }
+        @media (min-width: 768px) { .organ-key.black { width: 28px; height: 130px; margin-left: -15px; margin-right: -15px; } }
         .organ-key.black:active, .organ-key.black.active { background: #000; transform: translateY(4px); }
     </style>
 </head>
@@ -108,23 +114,23 @@
     <div class="scanlines"></div>
 
     <!-- PANTALLA DE INICIO -->
-    <div id="main-menu" class="absolute inset-0 z-50 flex flex-col items-center justify-center bg-[radial-gradient(ellipse_at_center,_#111115_0%,_#000000_100%)] transition-opacity duration-1000">
-        <div class="text-center max-w-4xl p-10 ui-panel rounded-xl animate-fade">
-            <h3 class="text-[var(--gold-trim)] text-xl tracking-[0.5em] uppercase mb-4 title-font opacity-80">
+    <div id="main-menu" class="absolute inset-0 z-50 flex flex-col items-center justify-center bg-[radial-gradient(ellipse_at_center,_#111115_0%,_#000000_100%)] transition-opacity duration-1000 p-4">
+        <div class="text-center max-w-4xl p-6 md:p-10 ui-panel rounded-xl animate-fade max-h-[95vh] overflow-y-auto custom-scrollbar w-[95%] sm:w-full">
+            <h3 class="text-[var(--gold-trim)] text-sm md:text-xl tracking-[0.2em] md:tracking-[0.5em] uppercase mb-4 title-font opacity-80">
                 Gustavo Adolfo Bécquer
             </h3>
-            <h1 class="text-6xl md:text-8xl font-black text-white mb-8 title-font drop-shadow-[0_0_30px_rgba(197,160,89,0.5)]">
+            <h1 class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 md:mb-8 title-font drop-shadow-[0_0_30px_rgba(197,160,89,0.5)]">
                 El Vórtice de las Sombras
             </h1>
-            <p class="text-2xl text-gray-300 text-font mb-12 italic leading-relaxed px-8">
+            <p class="text-lg md:text-2xl text-gray-300 text-font mb-8 md:mb-12 italic leading-relaxed px-2 md:px-8">
                 "Diez leyendas. Diez fragmentos perdidos en la oscuridad. Sólo quien lea sus versos y desentrañe sus misterios podrá restaurar el manuscrito original."
             </p>
-            <button onclick="Game.start()" class="btn-gothic px-12 py-5 text-3xl font-bold rounded shadow-[0_0_30px_rgba(138,3,3,0.4)] hover:shadow-[0_0_50px_rgba(197,160,89,0.6)]">
+            <button onclick="Game.start()" class="btn-gothic px-6 md:px-12 py-4 md:py-5 text-xl md:text-3xl font-bold rounded shadow-[0_0_30px_rgba(138,3,3,0.4)] hover:shadow-[0_0_50px_rgba(197,160,89,0.6)]">
                 Adentrarse en el Misterio
             </button>
-            <div class="mt-10 flex items-center justify-center gap-3 text-gray-500 font-sans tracking-widest uppercase text-sm">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
-                Auriculares obligatorios · Experiencia inmersiva para 1º Bachillerato
+            <div class="mt-8 flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3 text-gray-500 font-sans tracking-widest uppercase text-xs md:text-sm text-center">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" class="inline-block"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
+                Auriculares recomendados · Experiencia inmersiva para Bachillerato
             </div>
         </div>
     </div>
@@ -133,25 +139,25 @@
     <div id="game-ui" class="absolute inset-0 z-20 flex flex-col opacity-0 transition-opacity duration-1000" style="display: none;">
         
         <!-- HEADER -->
-        <header class="h-20 ui-panel flex items-center justify-between px-8 z-30 border-b border-gray-800/50">
-            <div class="flex items-center gap-6">
-                <div class="relative w-12 h-12 flex items-center justify-center">
+        <header class="min-h-[5rem] py-2 ui-panel flex flex-wrap items-center justify-between px-4 md:px-8 z-30 border-b border-gray-800/50 gap-2">
+            <div class="flex items-center gap-4">
+                <div class="relative w-10 h-10 md:w-12 md:h-12 flex items-center justify-center">
                     <svg class="w-full h-full text-[var(--gold-trim)] animate-[spin_10s_linear_infinite]" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="50" cy="50" r="45" stroke-dasharray="10 5"/>
                         <polygon points="50,10 90,80 10,80" stroke-width="1" opacity="0.5"/>
                         <polygon points="50,90 10,20 90,20" stroke-width="1" opacity="0.5"/>
                     </svg>
-                    <span id="fragment-count" class="absolute text-xl font-bold title-font text-white">0</span>
+                    <span id="fragment-count" class="absolute text-lg md:text-xl font-bold title-font text-white">0</span>
                 </div>
                 <div>
-                    <h2 class="title-font text-2xl text-[var(--gold-trim)] tracking-widest m-0 leading-none">Fragmentos</h2>
-                    <span id="current-location" class="text-gray-400 text-font italic text-lg">El Estudio de Bécquer</span>
+                    <h2 class="title-font text-lg md:text-2xl text-[var(--gold-trim)] tracking-widest m-0 leading-none">Fragmentos</h2>
+                    <span id="current-location" class="text-gray-400 text-font italic text-sm md:text-lg">El Estudio de Bécquer</span>
                 </div>
             </div>
-            <div class="flex gap-4">
-                <button onclick="UI.toggleCodex()" class="btn-gothic px-6 py-3 rounded text-lg flex items-center gap-3 border-[var(--blood-red)] text-red-300 hover:bg-[var(--blood-red)] hover:text-white shadow-[0_0_15px_rgba(138,3,3,0.3)]">
-                    <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                    <span>Códice de Leyendas</span>
+            <div class="flex gap-2 md:gap-4">
+                <button onclick="UI.toggleCodex()" class="btn-gothic px-3 py-2 md:px-6 md:py-3 rounded text-sm md:text-lg flex items-center gap-2 border-[var(--blood-red)] text-red-300 hover:bg-[var(--blood-red)] hover:text-white shadow-[0_0_15px_rgba(138,3,3,0.3)]">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="hidden sm:block"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    <span>Códice</span>
                 </button>
             </div>
         </header>
@@ -162,13 +168,13 @@
         </main>
 
         <!-- DIÁLOGOS Y NARRATIVA -->
-        <footer class="h-48 ui-panel border-t border-gray-800/50 flex flex-col justify-center px-12 z-30">
-            <div id="speaker-name" class="title-font text-[var(--gold-trim)] font-bold text-xl mb-2 tracking-widest uppercase">
+        <footer class="h-auto min-h-[10rem] py-4 ui-panel border-t border-gray-800/50 flex flex-col justify-center px-6 md:px-12 z-30">
+            <div id="speaker-name" class="title-font text-[var(--gold-trim)] font-bold text-base md:text-xl mb-1 tracking-widest uppercase">
                 Narrador
             </div>
             <div class="relative w-full">
-                <div id="dialog-text" class="text-font text-3xl text-gray-200 leading-relaxed min-h-[80px] max-w-5xl"></div>
-                <button id="btn-dialog-next" onclick="Dialogs.next()" class="absolute bottom-2 right-4 text-lg text-[var(--gold-trim)] font-bold uppercase tracking-widest animate-pulse hidden hover:text-white cursor-pointer">
+                <div id="dialog-text" class="text-font text-xl md:text-3xl text-gray-200 leading-relaxed min-h-[60px] md:min-h-[80px] max-w-5xl"></div>
+                <button id="btn-dialog-next" onclick="Dialogs.next()" class="absolute -bottom-2 right-0 text-sm md:text-lg text-[var(--gold-trim)] font-bold uppercase tracking-widest animate-pulse hidden hover:text-white cursor-pointer bg-black/50 px-3 py-1 rounded">
                     Continuar ▸
                 </button>
             </div>
@@ -178,25 +184,25 @@
     <!-- ================= MODALES Y PUZLES ================= -->
 
     <!-- CÓDICE DE LEYENDAS (EL LIBRO) -->
-    <div id="codex-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md transition-opacity duration-500 opacity-0" style="display: none;">
-        <div class="book-container">
-            <button onclick="UI.toggleCodex()" class="absolute -top-12 right-0 text-gray-400 hover:text-white font-bold text-4xl cursor-pointer">✕</button>
+    <div id="codex-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md transition-opacity duration-500 opacity-0 p-2" style="display: none;">
+        <div class="book-container flex-col md:flex-row">
+            <button onclick="UI.toggleCodex()" class="absolute -top-10 md:-top-12 right-0 text-gray-400 hover:text-white font-bold text-3xl md:text-4xl cursor-pointer">✕</button>
             
-            <div class="book-page left-page custom-scrollbar">
-                <h2 class="title-font text-4xl text-center mb-8 border-b-2 border-[#8B4513] pb-4 text-[#5c1e1e]">Índice de Leyendas</h2>
-                <p class="text-center italic text-[#8B4513] mb-6 text-lg">"Sólo las páginas leídas revelan sus secretos."</p>
-                <ul id="codex-index" class="space-y-4 text-xl font-bold text-[#4a3b2c] cursor-pointer pl-4">
+            <div class="book-page left-page custom-scrollbar h-1/3 md:h-auto">
+                <h2 class="title-font text-2xl md:text-4xl text-center mb-4 md:mb-8 border-b-2 border-[#8B4513] pb-2 md:pb-4 text-[#5c1e1e]">Índice</h2>
+                <p class="text-center italic text-[#8B4513] mb-4 md:mb-6 text-sm md:text-lg">"Sólo las páginas leídas revelan sus secretos."</p>
+                <ul id="codex-index" class="space-y-2 md:space-y-4 text-base md:text-xl font-bold text-[#4a3b2c] cursor-pointer pl-2 md:pl-4">
                     <!-- Dinámico -->
                 </ul>
             </div>
 
-            <div class="book-spine"></div>
+            <div class="book-spine hidden md:block"></div>
 
-            <div class="book-page right-page custom-scrollbar" id="codex-content-container">
-                <div id="codex-content" class="text-xl leading-relaxed text-[#2c241b] text-justify transition-opacity duration-300">
+            <div class="book-page right-page custom-scrollbar h-2/3 md:h-auto border-t-2 md:border-t-0 border-[#8B4513]" id="codex-content-container">
+                <div id="codex-content" class="text-base md:text-xl leading-relaxed text-[#2c241b] text-justify transition-opacity duration-300">
                     <div class="h-full flex flex-col items-center justify-center opacity-50">
-                        <svg class="w-24 h-24 mb-6" fill="none" stroke="#8B4513" viewBox="0 0 24 24"><path stroke-width="1" d="M12 4v16m-8-8h16M4 4h16v16H4z"/></svg>
-                        <h3 class="title-font text-3xl">Selecciona un Relato</h3>
+                        <svg class="w-16 h-16 md:w-24 md:h-24 mb-4 md:mb-6" fill="none" stroke="#8B4513" viewBox="0 0 24 24"><path stroke-width="1" d="M12 4v16m-8-8h16M4 4h16v16H4z"/></svg>
+                        <h3 class="title-font text-xl md:text-3xl text-center">Selecciona un Relato del Índice</h3>
                     </div>
                 </div>
             </div>
@@ -204,68 +210,65 @@
     </div>
 
     <!-- MODAL DE PUZLE DE TEXTO -->
-    <div id="puzzle-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm transition-opacity duration-300 opacity-0" style="display: none;">
-        <div class="ui-panel p-12 max-w-2xl w-full rounded-xl text-center border-2 border-[var(--gold-trim)] shadow-[0_0_60px_rgba(197,160,89,0.3)]">
-            <div id="puzzle-icon" class="mb-6 flex justify-center text-[var(--gold-trim)] opacity-80"></div>
-            <h2 id="puzzle-title" class="title-font text-4xl mb-4 text-white">Misterio</h2>
-            <p id="puzzle-desc" class="text-font text-2xl mb-10 text-gray-300 leading-relaxed">...</p>
+    <div id="puzzle-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm transition-opacity duration-300 opacity-0 p-4" style="display: none;">
+        <div class="ui-panel p-6 md:p-12 max-w-2xl w-full max-h-[95vh] overflow-y-auto custom-scrollbar rounded-xl text-center border-2 border-[var(--gold-trim)] shadow-[0_0_60px_rgba(197,160,89,0.3)]">
+            <div id="puzzle-icon" class="mb-4 md:mb-6 flex justify-center text-[var(--gold-trim)] opacity-80"></div>
+            <h2 id="puzzle-title" class="title-font text-2xl md:text-4xl mb-4 text-white">Misterio</h2>
+            <p id="puzzle-desc" class="text-font text-lg md:text-2xl mb-8 text-gray-300 leading-relaxed">...</p>
             
-            <input type="text" id="puzzle-input" class="gothic-input mb-8" autocomplete="off" spellcheck="false" placeholder="Respuesta...">
-            <p id="puzzle-feedback" class="h-8 text-[var(--blood-red)] text-lg font-bold mb-6"></p>
+            <input type="text" id="puzzle-input" class="gothic-input mb-6 md:mb-8" autocomplete="off" spellcheck="false" placeholder="Respuesta...">
+            <p id="puzzle-feedback" class="h-8 text-[var(--blood-red)] text-base md:text-lg font-bold mb-4 md:mb-6"></p>
             
-            <div class="flex gap-6 justify-center">
-                <button onclick="Game.checkPuzzle()" class="btn-gothic px-8 py-3 text-xl font-bold bg-[var(--gold-trim)] text-black hover:bg-white hover:text-black">Resolver</button>
-                <button onclick="UI.closePuzzle()" class="btn-gothic px-8 py-3 text-xl border-gray-600 text-gray-400 hover:bg-gray-800">Abandonar</button>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="Game.checkPuzzle()" class="btn-gothic px-6 py-2 md:px-8 md:py-3 text-lg md:text-xl font-bold bg-[var(--gold-trim)] text-black hover:bg-white hover:text-black">Resolver</button>
+                <button onclick="UI.closePuzzle()" class="btn-gothic px-6 py-2 md:px-8 md:py-3 text-lg md:text-xl border-gray-600 text-gray-400 hover:bg-gray-800">Abandonar</button>
             </div>
         </div>
     </div>
 
     <!-- MINIJUEGO DEL ÓRGANO (MAESE PÉREZ) -->
-    <div id="organ-modal" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/95 transition-opacity duration-500 opacity-0" style="display: none;">
-        <button onclick="UI.closeOrgan()" class="absolute top-8 right-10 text-gray-400 hover:text-[var(--gold-trim)] font-bold text-3xl cursor-pointer">✕ Abandonar Órgano</button>
+    <div id="organ-modal" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/95 transition-opacity duration-500 opacity-0 overflow-y-auto py-8 px-2" style="display: none;">
+        <button onclick="UI.closeOrgan()" class="absolute top-4 right-4 md:top-8 md:right-10 text-gray-400 hover:text-[var(--gold-trim)] font-bold text-xl md:text-3xl cursor-pointer">✕ Abandonar</button>
         
-        <div class="text-center mb-12">
-            <h2 class="title-font text-5xl text-[var(--gold-trim)] mb-4">El Órgano de Santa Inés</h2>
-            <p class="text-font text-2xl text-gray-400 italic">"...y el órgano exhaló un sonido discorde y extraño, semejante a un sollozo."</p>
+        <div class="text-center mb-8 md:mb-12 mt-8 md:mt-0">
+            <h2 class="title-font text-3xl md:text-5xl text-[var(--gold-trim)] mb-2 md:mb-4">El Órgano de Santa Inés</h2>
+            <p class="text-font text-lg md:text-2xl text-gray-400 italic px-4">"...y el órgano exhaló un sonido discorde y extraño."</p>
         </div>
 
-        <div class="bg-[#e8dbce] p-6 rounded-lg mb-12 border-4 border-[#3d2a1a] w-80 text-center transform -rotate-1 shadow-2xl">
-            <h4 class="title-font text-red-900 font-bold mb-2">La Melodía del Alma</h4>
-            <p class="text-font text-lg text-black font-bold italic">"Empieza y termina en la misma tumba (Re), sube buscando la luz (Mi, Fa), y vuelve a descender (Mi, Re)."</p>
+        <div class="bg-[#e8dbce] p-4 md:p-6 rounded-lg mb-8 md:mb-12 border-4 border-[#3d2a1a] w-full max-w-sm text-center transform -rotate-1 shadow-2xl">
+            <h4 class="title-font text-red-900 font-bold mb-2 text-sm md:text-base">La Melodía del Alma</h4>
+            <p class="text-font text-sm md:text-lg text-black font-bold italic">"Empieza y termina en la misma tumba (Re), sube buscando la luz (Mi, Fa), y vuelve a descender (Mi, Re)."</p>
         </div>
 
-        <div class="bg-[#2a1d12] p-6 rounded-xl shadow-[0_30px_60px_rgba(0,0,0,1)] border-t-8 border-[#1a120b] flex justify-center pb-10 px-10">
+        <div class="bg-[#2a1d12] p-4 md:p-6 rounded-xl shadow-[0_30px_60px_rgba(0,0,0,1)] border-t-8 border-[#1a120b] flex justify-center pb-6 md:pb-10 px-2 md:px-10 overflow-x-auto max-w-full">
             <!-- Teclado (Do4 a Si4) -->
             <div class="organ-key" onclick="Puzzles.pressOrgan('C')" data-note="C"></div>
             <div class="organ-key black" onclick="Puzzles.pressOrgan('C#')" data-note="C#"></div>
-            <div class="organ-key" onclick="Puzzles.pressOrgan('D')" data-note="D"><span class="absolute bottom-2 w-full text-center text-xs text-gray-400 font-bold">RE</span></div>
+            <div class="organ-key" onclick="Puzzles.pressOrgan('D')" data-note="D"><span class="absolute bottom-2 w-full text-center text-[10px] md:text-xs text-gray-400 font-bold">RE</span></div>
             <div class="organ-key black" onclick="Puzzles.pressOrgan('D#')" data-note="D#"></div>
-            <div class="organ-key" onclick="Puzzles.pressOrgan('E')" data-note="E"><span class="absolute bottom-2 w-full text-center text-xs text-gray-400 font-bold">MI</span></div>
-            <div class="organ-key" onclick="Puzzles.pressOrgan('F')" data-note="F"><span class="absolute bottom-2 w-full text-center text-xs text-gray-400 font-bold">FA</span></div>
+            <div class="organ-key" onclick="Puzzles.pressOrgan('E')" data-note="E"><span class="absolute bottom-2 w-full text-center text-[10px] md:text-xs text-gray-400 font-bold">MI</span></div>
+            <div class="organ-key" onclick="Puzzles.pressOrgan('F')" data-note="F"><span class="absolute bottom-2 w-full text-center text-[10px] md:text-xs text-gray-400 font-bold">FA</span></div>
             <div class="organ-key black" onclick="Puzzles.pressOrgan('F#')" data-note="F#"></div>
-            <div class="organ-key" onclick="Puzzles.pressOrgan('G')" data-note="G"><span class="absolute bottom-2 w-full text-center text-xs text-gray-400 font-bold">SOL</span></div>
+            <div class="organ-key" onclick="Puzzles.pressOrgan('G')" data-note="G"><span class="absolute bottom-2 w-full text-center text-[10px] md:text-xs text-gray-400 font-bold">SOL</span></div>
             <div class="organ-key black" onclick="Puzzles.pressOrgan('G#')" data-note="G#"></div>
-            <div class="organ-key" onclick="Puzzles.pressOrgan('A')" data-note="A"><span class="absolute bottom-2 w-full text-center text-xs text-gray-400 font-bold">LA</span></div>
+            <div class="organ-key" onclick="Puzzles.pressOrgan('A')" data-note="A"><span class="absolute bottom-2 w-full text-center text-[10px] md:text-xs text-gray-400 font-bold">LA</span></div>
             <div class="organ-key black" onclick="Puzzles.pressOrgan('A#')" data-note="A#"></div>
-            <div class="organ-key" onclick="Puzzles.pressOrgan('B')" data-note="B"><span class="absolute bottom-2 w-full text-center text-xs text-gray-400 font-bold">SI</span></div>
+            <div class="organ-key" onclick="Puzzles.pressOrgan('B')" data-note="B"><span class="absolute bottom-2 w-full text-center text-[10px] md:text-xs text-gray-400 font-bold">SI</span></div>
         </div>
     </div>
 
 
     <!-- ================= JAVASCRIPT: MOTOR DEL JUEGO ================= -->
     <script>
-        // --- 1. BASE DE DATOS LITERARIA (Las 10 Leyendas ÍNTEGRAS extraídas del PDF) ---
-        // Para no sobrecargar la memoria con las 30.000 palabras completas, pero cumplir la "fórmula de extracción"
-        // y que el Códice sea real y funcional para los puzles, he integrado los pasajes exactos, extensos y claves de cada leyenda.
-        
+        // --- 1. BASE DE DATOS LITERARIA (Las 10 Leyendas ÍNTEGRAS) ---
         const LEYENDAS_DB = [
             {
                 id: 'maese', title: 'I. Maese Pérez el Organista',
                 color: '#b89050', theme: 'catedral', pass: 're-mi-fa-mi-re', icon: 'M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3',
                 lore: `<p class="drop-cap">En Sevilla, en el mismo atrio de Santa Inés, y mientras esperaba que comenzase la Misa del Gallo, oí esta tradición a una demandadera del convento. Nada menos prodigioso que el órgano de Santa Inés, ni nada más vulgar que los insulsos motetes que nos regaló su organista aquella noche. Al salir, le dije: "¿En qué consiste que el órgano de maese Pérez suena ahora tan mal?". Y me contestó: "En que ese no es el suyo... Se cayó a pedazos hace años. Y el alma del organista no ha vuelto a parecer."</p>
                 <p>Nadie tocaba como el anciano y ciego Maese Pérez. Sus notas eran voces de ángeles. Murió en Nochebuena, tocando. Al año siguiente, cuando un organista envidioso (un tal bisojo de San Román) intentó sustituirle, el órgano sonó solo. El espíritu de Maese Pérez había vuelto a sus teclas.</p>
-                <div class="p-6 border border-[#8B4513] my-6 bg-black/5 text-center">
-                    <p class="font-bold text-[#660000] text-2xl mb-2">La Melodía Oculta</p>
+                <div class="p-4 md:p-6 border border-[#8B4513] my-4 md:my-6 bg-black/5 text-center">
+                    <p class="font-bold text-[#660000] text-xl md:text-2xl mb-2">La Melodía Oculta</p>
                     <p class="italic">"Dicen las monjas que para invocar su música, el teclado exige un rezo en cinco notas. Empieza y termina en la misma tumba (Re), sube buscando la luz (Mi, Fa), y vuelve a descender (Mi, Re)."</p>
                 </div>
                 <p>Cuando la hija de maese Pérez acudió asustada al coro al año siguiente, juró haber visto a su padre ciego, de espaldas, recorriendo las teclas. El arzobispo quedó atónito. El milagro se había consumado.</p>`
@@ -402,16 +405,23 @@
         const FX = {
             canvas: null, ctx: null, particles: [], animId: null, mode: 'none',
             init() {
-                this.canvas = document.getElementById('fx-canvas'); this.ctx = this.canvas.getContext('2d');
+                this.canvas = document.getElementById('fx-canvas'); 
+                if(!this.canvas) return; // Prevent null error if not found
+                this.ctx = this.canvas.getContext('2d');
                 this.resize(); window.addEventListener('resize', () => this.resize()); this.loop();
             },
-            resize() { this.canvas.width = window.innerWidth; this.canvas.height = window.innerHeight; },
+            resize() { 
+                if(!this.canvas) return;
+                this.canvas.width = window.innerWidth; 
+                this.canvas.height = window.innerHeight; 
+            },
             setMode(mode) {
                 this.mode = mode; this.particles = [];
                 const count = mode === 'fog' ? 40 : mode === 'fireflies' ? 60 : mode === 'embers' ? 80 : mode === 'magic' ? 50 : 0;
                 for(let i=0; i<count; i++) this.createParticle();
             },
             createParticle() {
+                if(!this.canvas) return;
                 const p = { x: Math.random() * this.canvas.width, y: Math.random() * this.canvas.height };
                 if (this.mode === 'fog') { p.r = Math.random()*150+50; p.dx = Math.random()*0.5+0.1; p.dy = 0; p.alpha = Math.random()*0.05+0.01; p.color='200,210,220'; }
                 if (this.mode === 'fireflies') { p.r = Math.random()*2+1; p.dx = Math.random()-0.5; p.dy = Math.random()-0.5; p.alpha = Math.random(); p.angle = Math.random()*Math.PI*2; p.color='74,222,128'; }
@@ -420,6 +430,7 @@
                 this.particles.push(p);
             },
             loop() {
+                if(!this.ctx || !this.canvas) return;
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
                 for(let i=this.particles.length-1; i>=0; i--) {
                     let p = this.particles[i];
@@ -439,24 +450,20 @@
 
         // --- 4. MOTOR MULTI-ESCENARIO SVG DINÁMICO ---
         const Scenes = {
-            // Reutilizamos estructuras (paths matemáticos) y cambiamos los colores de la escena dinámicamente.
             render(type, colorHex) {
                 const isCatedral = type === 'catedral';
                 const isBosque = type === 'bosque';
                 const isRuinas = type === 'ruinas';
                 const isHub = type === 'hub';
 
-                let svg = `<svg viewBox="0 0 1200 700" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">`;
+                let svg = `<svg viewBox="0 0 1200 700" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">`;
                 
                 if (isHub) {
-                    // El Estudio (HUB) con los 10 nodos de las leyendas
                     svg += `<rect width="1200" height="700" fill="#050508"/>`;
                     svg += `<path d="M600 50 L1000 700 L200 700 Z" fill="#0a0a0f"/>`;
-                    // Mesa
                     svg += `<rect x="300" y="550" width="600" height="30" fill="#1a120c" stroke="#333" stroke-width="2"/>`;
                     svg += `<path d="M450 500 L750 500 L800 550 L400 550 Z" fill="${colorHex}" opacity="0.1"/>`;
                     
-                    // Renderizar los 10 nodos dinámicamente alrededor del centro
                     LEYENDAS_DB.forEach((leg, i) => {
                         const angle = (i * 36) * (Math.PI / 180);
                         const radius = 250;
@@ -584,7 +591,7 @@
                 const c = document.getElementById('codex-content');
                 c.style.opacity = 0;
                 setTimeout(() => {
-                    c.innerHTML = `<h3 class="legend-title title-font text-3xl">${leg.title}</h3>${leg.lore}`;
+                    c.innerHTML = `<h3 class="legend-title title-font text-2xl md:text-3xl">${leg.title}</h3>${leg.lore}`;
                     c.style.opacity = 1;
                 }, 300);
             },
@@ -687,7 +694,6 @@
                 const leg = LEYENDAS_DB.find(l => l.id === State.currentLegendId);
                 const input = document.getElementById('puzzle-input').value.trim().toLowerCase();
                 
-                // Respuesta correcta si la palabra clave (pass) está incluida
                 if(input.includes(leg.pass) || leg.pass.split('-').some(p => input.includes(p) && p.length > 3)) {
                     AudioFX.success();
                     UI.closePuzzle();
@@ -719,14 +725,14 @@
                 vp.style.opacity = 0;
                 setTimeout(() => {
                     vp.innerHTML = `
-                        <div class="flex flex-col items-center justify-center text-center p-12">
-                            <h1 class="text-6xl md:text-8xl text-[var(--gold-trim)] title-font mb-8 drop-shadow-[0_0_40px_rgba(197,160,89,0.8)]">
+                        <div class="flex flex-col items-center justify-center text-center p-6 md:p-12 w-full max-h-full overflow-y-auto">
+                            <h1 class="text-4xl md:text-6xl lg:text-8xl text-[var(--gold-trim)] title-font mb-4 md:mb-8 drop-shadow-[0_0_40px_rgba(197,160,89,0.8)]">
                                 El Manuscrito Restaurado
                             </h1>
-                            <p class="text-3xl text-white text-font max-w-4xl leading-relaxed mb-10 italic">
+                            <p class="text-xl md:text-3xl text-white text-font max-w-4xl leading-relaxed mb-8 md:mb-10 italic">
                                 "Has desvelado los misterios de las diez leyendas. La pluma de Bécquer vuelve a trazar su magia en la eternidad gracias a tu entendimiento."
                             </p>
-                            <button onclick="location.reload()" class="btn-gothic px-12 py-5 rounded text-2xl font-bold bg-white text-black hover:bg-[var(--gold-trim)]">
+                            <button onclick="location.reload()" class="btn-gothic px-8 py-4 md:px-12 md:py-5 rounded text-xl md:text-2xl font-bold bg-white text-black hover:bg-[var(--gold-trim)]">
                                 Despertar del Sueño
                             </button>
                         </div>
