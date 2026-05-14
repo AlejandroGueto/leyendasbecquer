@@ -91,10 +91,11 @@
         .wiki-content { font-family: 'Crimson Text', serif; font-size: 1.15rem; line-height: 1.6; color: #2c241b; }
         @media (min-width: 768px) { .wiki-content { font-size: 1.35rem; } }
         .wiki-content p { margin-bottom: 1.2em; text-align: justify; }
+        /* Ocultamos cualquier rastro de metadatos o basura de wiki que haya podido escapar al filtro JS */
         .wiki-content h2, .wiki-content h3 { font-family: 'Cinzel Decorative', serif; color: #5c1e1e; border-bottom: 1px solid #8B4513; margin-top: 1.5em; padding-bottom: 0.2em; font-size: 1.8rem; }
-        .wiki-content .mw-editsection, .wiki-content .infobox, .wiki-content .navbox, .wiki-content .mw-empty-elt, .wiki-content table { display: none !important; }
+        .wiki-content .mw-editsection, .wiki-content .infobox, .wiki-content .navbox, .wiki-content .mw-empty-elt, .wiki-content table, .wiki-content .ws-header, .wiki-content .headertemplate, .wiki-content .metadata { display: none !important; }
         .wiki-content a { color: #8a0303; text-decoration: none; pointer-events: none; }
-        .wiki-content .mw-parser-output > p:first-of-type::first-letter { font-size: 3.5em; float: left; margin: 0.1em 0.1em 0 0; line-height: 0.8; font-family: 'Cinzel Decorative'; color: #8a0303; }
+        .wiki-content .mw-parser-output > p:first-of-type::first-letter, .wiki-content > p:first-of-type::first-letter { font-size: 3.5em; float: left; margin: 0.1em 0.1em 0 0; line-height: 0.8; font-family: 'Cinzel Decorative'; color: #8a0303; }
 
         .gothic-input {
             background: transparent; border: none; border-bottom: 2px solid var(--blood-red);
@@ -269,57 +270,66 @@
 
     <!-- ================= JAVASCRIPT: MOTOR DEL JUEGO ================= -->
     <script>
-        // --- 1. BASE DE DATOS LITERARIA ---
-        // Contiene el lore resumido de emergencia y el ID para invocar la API de Wikisource.
+        // --- 1. BASE DE DATOS LITERARIA (Con Preguntas Específicas) ---
         const LEYENDAS_DB = [
             {
                 id: 'maese', title: 'I. Maese Pérez el Organista', wiki: 'Maese_Pérez_el_organista',
                 color: '#b89050', theme: 'catedral', pass: 're-mi-fa-mi-re', icon: 'M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3',
+                question: 'Toca las teclas correctas para invocar el alma de maese Pérez.',
                 lore: `<p>En Sevilla, en el mismo atrio de Santa Inés...</p>`
             },
             {
                 id: 'ojos', title: 'II. Los Ojos Verdes', wiki: 'Los_ojos_verdes',
                 color: '#4ade80', theme: 'bosque', pass: 'fernando', icon: 'M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z',
+                question: '¿Cuál es el nombre del primogénito de Almenar que, hechizado por unos ojos imposibles, cayó al abismo del remanso?',
                 lore: `<p>Herido va el ciervo... herido va; no hay duda...</p>`
             },
             {
                 id: 'ajorca', title: 'III. La Ajorca de Oro', wiki: 'La_ajorca_de_oro',
                 color: '#eab308', theme: 'catedral', pass: 'sagrario', icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z',
+                question: '¿De qué lugar concreto (recinto/capilla) de la Catedral de Toledo arranca Pedro la joya de oro para su amada, desatando la locura?',
                 lore: `<p>Ella era hermosa, hermosa con esa hermosura que inspira el vértigo...</p>`
             },
             {
                 id: 'rayo', title: 'IV. El Rayo de Luna', wiki: 'El_rayo_de_luna',
                 color: '#94a3b8', theme: 'bosque', pass: 'manrique', icon: 'M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z',
+                question: '¿Cómo se llama el noble solitario, amante de las ruinas y la poesía, que enloqueció persiguiendo un destello en la noche?',
                 lore: `<p>Manrique amaba la soledad de tal modo que algunas veces hubiera deseado no tener sombra...</p>`
             },
             {
                 id: 'cruz', title: 'V. La Cruz del Diablo', wiki: 'La_cruz_del_diablo',
                 color: '#ef4444', theme: 'ruinas', pass: 'bellver', icon: 'M12 4v16m8-8H4',
+                question: '¿A qué paraje o pueblo, cercano a los Pirineos, pertenece la cruz donde quedó prisionero el espíritu del Señor del Segre?',
                 lore: `<p>En Bellver, cerca de los Pirineos, hay una cruz de hierro y mármol cubierta de orín...</p>`
             },
             {
                 id: 'cristo', title: 'VI. El Cristo de la Calavera', wiki: 'El_Cristo_de_la_calavera',
                 color: '#b91c1c', theme: 'catedral', pass: 'alonso', icon: 'M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4',
+                question: 'Uno de los caballeros rivales que se batió en duelo por Doña Inés era Lope de Sandoval. ¿Cuál era el nombre de pila del otro caballero?',
                 lore: `<p>El rey de Castilla marchaba a la guerra de moros...</p>`
             },
             {
                 id: 'corza', title: 'VII. La Corza Blanca', wiki: 'La_corza_blanca',
                 color: '#f8fafc', theme: 'bosque', pass: 'constanza', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z',
+                question: '¿Cuál es el nombre de la hermosa hija de don Dionís, descubierta por Garcés bajo la forma de un animal blanco?',
                 lore: `<p>El zagal Esteban juraba haber visto en el Moncayo una corza blanca que guiaba a las demás...</p>`
             },
             {
                 id: 'animas', title: 'VIII. El Monte de las Ánimas', wiki: 'El_monte_de_las_ánimas',
                 color: '#fb923c', theme: 'ruinas', pass: 'beatriz', icon: 'M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z',
+                question: '¿Cómo se llamaba la orgullosa y fría mujer cuya banda azul quedó perdida en el monte la Noche de Difuntos?',
                 lore: `<p>La noche de difuntos me despertó el doble de las campanas...</p>`
             },
             {
                 id: 'gnomo', title: 'IX. El Gnomo', wiki: 'El_gnomo',
                 color: '#06b6d4', theme: 'bosque', pass: 'marta', icon: 'M13 10V3L4 14h7v7l9-11h-7z',
+                question: 'De las dos hermanas que acudieron a la fuente, ¿cuál era la ambiciosa que se dejó arrastrar por el gnomo a las entrañas de la tierra?',
                 lore: `<p>Las muchachas del lugar volvían de la fuente con sus cántaros...</p>`
             },
             {
                 id: 'miserere', title: 'X. El Miserere', wiki: 'El_Miserere',
                 color: '#64748b', theme: 'ruinas', pass: 'fitero', icon: 'M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3',
+                question: '¿En la biblioteca de qué abadía célebre encuentra el narrador los extraños garabatos musicales de esta historia?',
                 lore: `<p>Hace algunos meses que visitando la célebre abadía de Fitero...</p>`
             }
         ];
@@ -576,15 +586,24 @@
                     c.style.opacity = 1;
 
                     try {
-                        // Conexión en tiempo real a Wikisource para obtener el texto 100% completo e inalterado
+                        // Conexión a Wikisource
                         const url = `https://es.wikisource.org/w/api.php?action=parse&page=${encodeURIComponent(leg.wiki)}&format=json&origin=*`;
                         const response = await fetch(url);
                         const data = await response.json();
                         
                         if (data && data.parse && data.parse.text) {
-                            let html = data.parse.text['*'];
+                            let rawHtml = data.parse.text['*'];
                             
-                            // Añadimos la pista del órgano si es la leyenda de Maese Pérez
+                            // 1. LIMPIEZA ABSOLUTA DEL TEXTO (Filtro Anti-Metadatos)
+                            let doc = new DOMParser().parseFromString(rawHtml, "text/html");
+                            
+                            // Seleccionamos y borramos toda la basura de Wikipedia/Wikisource
+                            const unwantedElements = doc.querySelectorAll('.headertemplate, .ws-header, .ws-noexport, .mw-editsection, table, .navbox, .infobox, .metadata, .noprint, #ws-data, style, script, .sister-project, sup, .reference');
+                            unwantedElements.forEach(e => e.remove());
+                            
+                            let cleanHtml = doc.body.innerHTML;
+                            
+                            // 2. AÑADIMOS LA PISTA DEL ÓRGANO SI ES MAESE PÉREZ
                             let extraClue = "";
                             if (leg.id === 'maese') {
                                 extraClue = `
@@ -596,14 +615,14 @@
 
                             c.style.opacity = 0;
                             setTimeout(() => {
-                                c.innerHTML = `<h3 class="legend-title title-font text-3xl md:text-5xl">${leg.title}</h3>${extraClue}<div class="wiki-content">${html}</div>`;
+                                c.innerHTML = `<h3 class="legend-title title-font text-3xl md:text-5xl">${leg.title}</h3>${extraClue}<div class="wiki-content">${cleanHtml}</div>`;
                                 c.style.opacity = 1;
                             }, 300);
                         } else {
                             throw new Error("No wiki data found");
                         }
                     } catch(e) {
-                        // Fallback por si la conexión del colegio bloquea la API
+                        // Fallback de emergencia
                         c.style.opacity = 0;
                         setTimeout(() => {
                             c.innerHTML = `<h3 class="legend-title title-font text-3xl md:text-5xl">${leg.title}</h3>${leg.lore}<br><div class="p-4 border-2 border-red-800 bg-red-100 text-red-900 mt-6 text-center text-sm md:text-base"><b>Aviso mágico:</b> No se pudieron invocar los textos íntegros desde el éter de internet. Mostrando los fragmentos rescatados de emergencia.</div>`;
@@ -637,7 +656,10 @@
                     document.getElementById('puzzle-icon').innerHTML = `<svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="1.5" d="${leg.icon}"/></svg>`;
                     document.getElementById('puzzle-title').innerText = leg.title;
                     document.getElementById('puzzle-title').style.color = leg.color;
-                    document.getElementById('puzzle-desc').innerText = `Estás en el dominio de esta leyenda. Para liberar su fragmento, lee el Códice e introduce la palabra clave que revela su misterio.`;
+                    
+                    // Modificamos el texto para que muestre el acertijo concreto
+                    document.getElementById('puzzle-desc').innerHTML = `<strong class="text-white text-xl md:text-3xl">Acertijo:</strong><br><br>${leg.question}<br><br><span class="text-sm md:text-lg text-[var(--gold-trim)] opacity-80"><em>Pista: Lee atentamente la leyenda en el Códice.</em></span>`;
+                    
                     document.getElementById('puzzle-input').value = "";
                     document.getElementById('puzzle-feedback').innerText = "";
                     
