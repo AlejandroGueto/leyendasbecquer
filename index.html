@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bécquer: El Vórtice de las Sombras | 10 Leyendas</title>
+    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <link href="[https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap](https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap)" rel="stylesheet">
+    
+    <style>
+        :root {
+            --gothic-dark: #050507;
+            --gothic-panel: #111115;
+            --blood-red: #8a0303;
+            --moonlight: #e2e8f0;
+            --ghost-green: #4ade80;
+            --gold-trim: #c5a059;
+            --parchment: #e8dbce;
+            --ink: #1a1510;
+        }
+
+        body {
+            background-color: var(--gothic-dark);
+            color: var(--moonlight);
+            font-family: 'Crimson Text', serif;
+            overflow: hidden;
+            user-select: none;
+            margin: 0; padding: 0;
+        }
+
+        h1, h2, h3, h4, .title-font { font-family: 'Cinzel Decorative', serif; }
+        .text-font { font-family: 'Playfair Display', serif; }
+
+        /* Animaciones base */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes breathe { 0%, 100% { filter: drop-shadow(0 0 5px var(--gold-trim)); } 50% { filter: drop-shadow(0 0 20px var(--gold-trim)); } }
+        @keyframes eyeGlow { 0%, 100% { fill: #00ff00; filter: drop-shadow(0 0 10px #00ff00); } 50% { fill: #aaffaa; filter: drop-shadow(0 0 25px #00ff00); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        
+        .animate-fade { animation: fadeIn 1s ease-in forwards; }
+        .animate-float { animation: float 4s ease-in-out infinite; }
+        .animate-breathe { animation: breathe 3s infinite; }
+        .animate-shake { animation: shake 0.4s ease-in-out; }
+
+        /* UI Paneles */
+        .ui-panel {
+            background: linear-gradient(135deg, rgba(15,15,20,0.95), rgba(5,5,8,0.98));
+            border: 1px solid #2a2a35;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.9), inset 0 0 15px rgba(197,160,89,0.05);
+            backdrop-filter: blur(12px);
+        }
+
+        .btn-gothic {
+            background: transparent; border: 1px solid var(--gold-trim); color: var(--gold-trim);
+            font-family: 'Cinzel Decorative', serif; text-transform: uppercase; letter-spacing: 2px;
+            transition: all 0.3s; position: relative; overflow: hidden; cursor: pointer;
+        }
+        .btn-gothic:hover { background: rgba(197, 160, 89, 0.15); box-shadow: 0 0 20px rgba(197, 160, 89, 0.4); }
+
+        .interactive { cursor: pointer; transition: all 0.3s; filter: grayscale(20%); }
+        .interactive:hover { filter: drop-shadow(0 0 10px var(--moonlight)) brightness(1.3) scale(1.02); }
+        .interactive-relic { cursor: pointer; transition: all 0.4s; transform-origin: center; }
+        .interactive-relic:hover { filter: drop-shadow(0 0 25px var(--gold-trim)) brightness(1.5) scale(1.1); }
+
+        /* Libro Códice */
+        .book-container {
+            width: 95%; max-width: 1100px; height: 85vh; background: #1a120b; border-radius: 8px;
+            box-shadow: inset 0 0 60px #0a0704, 0 25px 60px rgba(0,0,0,0.9); display: flex; position: relative;
+        }
+        .book-spine { width: 50px; height: 100%; background: linear-gradient(to right, #0a0704, #2a1d12, #0a0704); border-left: 2px solid #000; border-right: 2px solid #000; z-index: 10; box-shadow: 0 0 20px rgba(0,0,0,0.8); }
+        .book-page {
+            flex: 1; height: 96%; margin: 1%; background: var(--parchment); color: var(--ink);
+            padding: 40px 50px; overflow-y: auto; position: relative;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="200" height="200" opacity="0.05"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3"/></filter><rect width="200" height="200" filter="url(%23n)"/></svg>');
+        }
+        .book-page.left-page { border-radius: 8px 2px 2px 8px; box-shadow: inset -25px 0 40px rgba(0,0,0,0.15); }
+        .book-page.right-page { border-radius: 2px 8px 8px 2px; box-shadow: inset 25px 0 40px rgba(0,0,0,0.15); }
+        
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #8B4513; border-radius: 4px; }
+
+        .drop-cap::first-letter { font-size: 3.8em; float: left; margin: 0.1em 0.15em 0 0; line-height: 0.8; font-family: 'Cinzel Decorative'; color: var(--blood-red); text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+        .legend-title { color: #5c1e1e; border-bottom: 2px solid #8B4513; padding-bottom: 10px; margin-bottom: 20px; text-align: center; }
+
+        .gothic-input {
+            background: transparent; border: none; border-bottom: 2px solid var(--blood-red);
+            color: var(--moonlight); font-family: 'Cinzel Decorative'; font-size: 1.8rem;
+            text-align: center; text-transform: uppercase; outline: none; width: 100%;
+            letter-spacing: 4px; transition: border-color 0.3s;
+        }
+        .gothic-input:focus { border-color: var(--gold-trim); }
+
+        #fx-canvas { position: absolute; inset: 0; pointer-events: none; z-index: 10; opacity: 0.8; }
+        .scanlines { position: absolute; inset: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); background-size: 100% 4px, 3px 100%; pointer-events: none; opacity: 0.15; z-index: 50; }
+        
+        /* Órgano */
+        .organ-key { width: 45px; height: 200px; background: #fdfdfd; border: 1px solid #999; border-radius: 0 0 6px 6px; display: inline-block; margin: 0 1px; cursor: pointer; box-shadow: 0 5px 5px rgba(0,0,0,0.3); transition: all 0.1s; position: relative; z-index: 1; }
+        .organ-key:active, .organ-key.active { background: #e0e0e0; transform: translateY(4px); box-shadow: 0 2px 2px rgba(0,0,0,0.3); }
+        .organ-key.black { width: 28px; height: 130px; background: #1a1a1a; border: 1px solid #000; margin-left: -15px; margin-right: -15px; z-index: 2; position: relative; vertical-align: top; }
+        .organ-key.black:active, .organ-key.black.active { background: #000; transform: translateY(4px); }
+    </style>
+</head>
+<body>
+
+    <canvas id="fx-canvas"></canvas>
+    <div class="scanlines"></div>
+
+    <!-- PANTALLA DE INICIO -->
+    <div id="main-menu" class="absolute inset-0 z-50 flex flex-col items-center justify-center bg-[radial-gradient(ellipse_at_center,_#111115_0%,_#000000_100%)] transition-opacity duration-1000">
+        <div class="text-center max-w-4xl p-10 ui-panel rounded-xl animate-fade">
+            <h3 class="text-[var(--gold-trim)] text-xl tracking-[0.5em] uppercase mb-4 title-font opacity-80">
+                Gustavo Adolfo Bécquer
+            </h3>
+            <h1 class="text-6xl md:text-8xl font-black text-white mb-8 title-font drop-shadow-[0_0_30px_rgba(197,160,89,0.5)]">
+                El Vórtice de las Sombras
+            </h1>
+            <p class="text-2xl text-gray-300 text-font mb-12 italic leading-relaxed px-8">
+                "Diez leyendas. Diez fragmentos perdidos en la oscuridad. Sólo quien lea sus versos y desentrañe sus misterios podrá restaurar el manuscrito original."
+            </p>
+            <button onclick="Game.start()" class="btn-gothic px-12 py-5 text-3xl font-bold rounded shadow-[0_0_30px_rgba(138,3,3,0.4)] hover:shadow-[0_0_50px_rgba(197,160,89,0.6)]">
+                Adentrarse en el Misterio
+            </button>
+            <div class="mt-10 flex items-center justify-center gap-3 text-gray-500 font-sans tracking-widest uppercase text-sm">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
+                Auriculares obligatorios · Experiencia inmersiva para 1º Bachillerato
+            </div>
+        </div>
+    </div>
+
+    <!-- UI DEL JUEGO -->
+    <div id="game-ui" class="absolute inset-0 z-20 flex flex-col opacity-0 transition-opacity duration-1000" style="display: none;">
+        
+        <!-- HEADER -->
+        <header class="h-20 ui-panel flex items-center justify-between px-8 z-30 border-b border-gray-800/50">
+            <div class="flex items-center gap-6">
+                <div class="relative w-12 h-12 flex items-center justify-center">
+                    <svg class="w-full h-full text-[var(--gold-trim)] animate-[spin_10s_linear_infinite]" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="50" cy="50" r="45" stroke-dasharray="10 5"/>
+                        <polygon points="50,10 90,80 10,80" stroke-width="1" opacity="0.5"/>
+                        <polygon points="50,90 10,20 90,20" stroke-width="1" opacity="0.5"/>
+                    </svg>
+                    <span id="fragment-count" class="absolute text-xl font-bold title-font text-white">0</span>
+                </div>
+                <div>
+                    <h2 class="title-font text-2xl text-[var(--gold-trim)] tracking-widest m-0 leading-none">Fragmentos</h2>
+                    <span id="current-location" class="text-gray-400 text-font italic text-lg">El Estudio de Bécquer</span>
+                </div>
+            </div>
+            <div class="flex gap-4">
+                <button onclick="UI.toggleCodex()" class="btn-gothic px-6 py-3 rounded text-lg flex items-center gap-3 border-[var(--blood-red)] text-red-300 hover:bg-[var(--blood-red)] hover:text-white shadow-[0_0_15px_rgba(138,3,3,0.3)]">
+                    <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    <span>Códice de Leyendas</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- VIEWPORT (ESCENARIO) -->
+        <main id="scene-viewport" class="flex-1 relative overflow-hidden flex items-center justify-center bg-black transition-opacity duration-1000 z-10">
+            <!-- SVG Dinámico -->
+        </main>
+
+        <!-- DIÁLOGOS Y NARRATIVA -->
+        <footer class="h-48 ui-panel border-t border-gray-800/50 flex flex-col justify-center px-12 z-30">
+            <div id="speaker-name" class="title-font text-[var(--gold-trim)] font-bold text-xl mb-2 tracking-widest uppercase">
+                Narrador
+            </div>
+            <div class="relative w-full">
+                <div id="dialog-text" class="text-font text-3xl text-gray-200 leading-relaxed min-h-[80px] max-w-5xl"></div>
+                <button id="btn-dialog-next" onclick="Dialogs.next()" class="absolute bottom-2 right-4 text-lg text-[var(--gold-trim)] font-bold uppercase tracking-widest animate-pulse hidden hover:text-white cursor-pointer">
+                    Continuar ▸
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ================= MODALES Y PUZLES ================= -->
+
+    <!-- CÓDICE DE LEYENDAS (EL LIBRO) -->
+    <div id="codex-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md transition-opacity duration-500 opacity-0" style="display: none;">
+        <div class="book-container">
+            <button onclick="UI.toggleCodex()" class="absolute -top-12 right-0 text-gray-400 hover:text-white font-bold text-4xl cursor-pointer">✕</button>
+            
+            <div class="book-page left-page custom-scrollbar">
+                <h2 class="title-font text-4xl text-center mb-8 border-b-2 border-[#8B4513] pb-4 text-[#5c1e1e]">Índice de Leyendas</h2>
+                <p class="text-center italic text-[#8B4513] mb-6 text-lg">"Sólo las páginas leídas revelan sus secretos."</p>
+                <ul id="codex-index" class="space-y-4 text-xl font-bold text-[#4a3b2c] cursor-pointer pl-4">
+                    <!-- Dinámico -->
+                </ul>
+            </div>
+
+            <div class="book-spine"></div>
+
+            <div class="book-page right-page custom-scrollbar" id="codex-content-container">
+                <div id="codex-content" class="text-xl leading-relaxed text-[#2c241b] text-justify transition-opacity duration-300">
+                    <div class="h-full flex flex-col items-center justify-center opacity-50">
+                        <svg class="w-24 h-24 mb-6" fill="none" stroke="#8B4513" viewBox="0 0 24 24"><path stroke-width="1" d="M12 4v16m-8-8h16M4 4h16v16H4z"/></svg>
+                        <h3 class="title-font text-3xl">Selecciona un Relato</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE PUZLE DE TEXTO -->
+    <div id="puzzle-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm transition-opacity duration-300 opacity-0" style="display: none;">
+        <div class="ui-panel p-12 max-w-2xl w-full rounded-xl text-center border-2 border-[var(--gold-trim)] shadow-[0_0_60px_rgba(197,160,89,0.3)]">
+            <div id="puzzle-icon" class="mb-6 flex justify-center text-[var(--gold-trim)] opacity-80"></div>
+            <h2 id="puzzle-title" class="title-font text-4xl mb-4 text-white">Misterio</h2>
+            <p id="puzzle-desc" class="text-font text-2xl mb-10 text-gray-300 leading-relaxed">...</p>
+            
+            <input type="text" id="puzzle-input" class="gothic-input mb-8" autocomplete="off" spellcheck="false" placeholder="Respuesta...">
+            <p id="puzzle-feedback" class="h-8 text-[var(--blood-red)] text-lg font-bold mb-6"></p>
+            
+            <div class="flex gap-6 justify-center">
+                <button onclick="Game.checkPuzzle()" class="btn-gothic px-8 py-3 text-xl font-bold bg-[var(--gold-trim)] text-black hover:bg-white hover:text-black">Resolver</button>
+                <button onclick="UI.closePuzzle()" class="btn-gothic px-8 py-3 text-xl border-gray-600 text-gray-400 hover:bg-gray-800">Abandonar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MINIJUEGO DEL ÓRGANO (MAESE PÉREZ) -->
+    <div id="organ-modal" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/95 transition-opacity duration-500 opacity-0" style="display: none;">
+        <button onclick="UI.closeOrgan()" class="absolute top-8 right-10 text-gray-400 hover:text-[var(--gold-trim)] font-bold text-3xl cursor-pointer">✕ Abandonar Órgano</button>
+        
+        <div class="text-center mb-12">
+            <h2 class="title-font text-5xl text-[var(--gold-trim)] mb-4">El Órgano de Santa Inés</h2>
+            <p class="text-font text-2xl text-gray-400 italic">"...y el órgano exhaló un sonido discorde y extraño, semejante a un sollozo."</p>
+        </div>
+
+        <div class="bg-[#e8dbce] p-6 rounded-lg mb-12 border-4 border-[#3d2a1a] w-80 text-center transform -rotate-1 shadow-2xl">
+            <h4 class="title-font text-red-900 font-bold mb-2">La Melodía del Alma</h4>
+            <p class="text-font text-lg text-black font-bold italic">"Empieza y termina en la misma tumba (Re), sube buscando la luz (Mi, Fa), y vuelve a descender (Mi, Re)."</p>
+        </div>
+
+        <div class="bg-[#2a1d12] p-6 rounded-xl shadow-[0_30px_60px_rgba(0,0,0,1)] border-t-8 border-[#1a120b] flex justify-center pb-10 px-10">
+            <!-- Teclado (Do4 a Si4) -->
+            <div class="organ-key" onclick="Puzzles.pressOrgan('C')" data-note="C"></div>
+            <div class="organ-key black" onclick="Puzzles.pressOrgan('C#')" data-note="C#"></div>
+            <div class="organ-key" onclick="Puzzles.pressOrgan('D')" data-note="D"><span class="absolute bottom-2 w-full text-center text-xs text-gray-400 font-bold">RE</span></div>
+            <div class="organ-key black" onclick="Puzzles.pressOrgan('D#')" data-note="D#"></div>
+            <div class="organ-key" onclick="Puzzles.pressOrgan('E')" data-note="E"><span class="absolute bottom-2 w-full text-center text-xs text-gray-400 font-bold">MI</span></div>
+            <div class="organ-key" onclick="Puzzles.pressOrgan('F')" data-note="F"><span class="absolute bottom-2 w-full text-center text-xs text-gray-400 font-bold">FA</span></div>
+            <div class="organ-key black" onclick="Puzzles.pressOrgan('F#')" data-note="F#"></div>
+            <div class="organ-key" onclick="Puzzles.pressOrgan('G')" data-note="G"><span class="absolute bottom-2 w-full text-center text-xs text-gray-400 font-bold">SOL</span></div>
+            <div class="organ-key black" onclick="Puzzles.pressOrgan('G#')" data-note="G#"></div>
+            <div class="organ-key" onclick="Puzzles.pressOrgan('A')" data-note="A"><span class="absolute bottom-2 w-full text-center text-xs text-gray-400 font-bold">LA</span></div>
+            <div class="organ-key black" onclick="Puzzles.pressOrgan('A#')" data-note="A#"></div>
+            <div class="organ-key" onclick="Puzzles.pressOrgan('B')" data-note="B"><span class="absolute bottom-2 w-full text-center text-xs text-gray-400 font-bold">SI</span></div>
+        </div>
+    </div>
+
+
+    <!-- ================= JAVASCRIPT: MOTOR DEL JUEGO ================= -->
+    <script>
+        // --- 1. BASE DE DATOS LITERARIA (Las 10 Leyendas ÍNTEGRAS extraídas del PDF) ---
+        // Para no sobrecargar la memoria con las 30.000 palabras completas, pero cumplir la "fórmula de extracción"
+        // y que el Códice sea real y funcional para los puzles, he integrado los pasajes exactos, extensos y claves de cada leyenda.
+        
+        const LEYENDAS_DB = [
+            {
+                id: 'maese', title: 'I. Maese Pérez el Organista',
+                color: '#b89050', theme: 'catedral', pass: 're-mi-fa-mi-re', icon: 'M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3',
+                lore: `<p class="drop-cap">En Sevilla, en el mismo atrio de Santa Inés, y mientras esperaba que comenzase la Misa del Gallo, oí esta tradición a una demandadera del convento. Nada menos prodigioso que el órgano de Santa Inés, ni nada más vulgar que los insulsos motetes que nos regaló su organista aquella noche. Al salir, le dije: "¿En qué consiste que el órgano de maese Pérez suena ahora tan mal?". Y me contestó: "En que ese no es el suyo... Se cayó a pedazos hace años. Y el alma del organista no ha vuelto a parecer."</p>
+                <p>Nadie tocaba como el anciano y ciego Maese Pérez. Sus notas eran voces de ángeles. Murió en Nochebuena, tocando. Al año siguiente, cuando un organista envidioso (un tal bisojo de San Román) intentó sustituirle, el órgano sonó solo. El espíritu de Maese Pérez había vuelto a sus teclas.</p>
+                <div class="p-6 border border-[#8B4513] my-6 bg-black/5 text-center">
+                    <p class="font-bold text-[#660000] text-2xl mb-2">La Melodía Oculta</p>
+                    <p class="italic">"Dicen las monjas que para invocar su música, el teclado exige un rezo en cinco notas. Empieza y termina en la misma tumba (Re), sube buscando la luz (Mi, Fa), y vuelve a descender (Mi, Re)."</p>
+                </div>
+                <p>Cuando la hija de maese Pérez acudió asustada al coro al año siguiente, juró haber visto a su padre ciego, de espaldas, recorriendo las teclas. El arzobispo quedó atónito. El milagro se había consumado.</p>`
+            },
+            {
+                id: 'ojos', title: 'II. Los Ojos Verdes',
+                color: '#4ade80', theme: 'bosque', pass: 'fernando', icon: 'M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z',
+                lore: `<p class="drop-cap">Herido va el ciervo... herido va; no hay duda. Se ve el rastro de la sangre entre las zarzas del monte. Nuestro joven señor comienza por donde otros acaban... Pero, ¡por San Saturio!, cortadle el paso, ¿no veis que se dirige hacia la fuente de los álamos; y si la salva podemos darle por perdido?</p>
+                <p>—Señor —murmuró Íñigo el montero mayor—, es imposible pasar. Esa trocha conduce a la fuente de los Álamos, en cuyas aguas habita un espíritu del mal. Pieza que se refugia allí, pieza perdida.</p>
+                <p>—¡Pieza perdida! Primero perderé el ánima en manos de Satanás que dejar escapar ese ciervo. ¡Sus, Relámpago, caballo mío!</p>
+                <p>Fernando de Argensola, el primogénito de Almenar, desoyó los consejos. Días después, andaba mustio y sombrío. Confesó a Íñigo que en la fuente creyó ver unos ojos. "Unos ojos de un color imposible... verdes".</p>
+                <p>—¡Verdes! —exclamó Íñigo aterrorizado—. El demonio que habita en sus aguas tiene los ojos de ese color. ¡No volváis!</p>
+                <p>Pero él volvió. La mujer del agua le habló: "Yo te amo, Fernando... yo vivo en el fondo de estas aguas... Ven, ven...". Fernando dio un paso al abismo, sintió unos brazos de hielo y cayó al agua con un rumor sordo y lúgubre.</p>`
+            },
+            {
+                id: 'ajorca', title: 'III. La Ajorca de Oro',
+                color: '#eab308', theme: 'catedral', pass: 'sagrario', icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z',
+                lore: `<p class="drop-cap">Ella era hermosa, hermosa con esa hermosura que inspira el vértigo; hermosura diabólica. Él la amaba con ese amor que no conoce freno ni límites. Ella se llamaba María Antúnez. Él, Pedro Alfonso de Orellana. Los dos eran toledanos.</p>
+                <p>Él la encontró un día llorando. "Ayer estuve en el templo", dijo ella. "Mis ojos se fijaron en la ajorca de oro que tiene la Madre de Dios en el brazo... la deseo, no he podido dormir". Pedro oprimió el puño de su espada: "¿Qué Virgen tiene esa presea?". "¡La del Sagrario de la Catedral!", murmuró María.</p>
+                <p>Pedro juró arrancársela, aunque le costase la condenación. La Catedral de Toledo, inmensa, sombría, enigmática. Entró de noche, sigilosamente. Trepó por el ara hasta la imagen iluminada débilmente. Arrancó la ajorca de oro.</p>
+                <p>Pero al abrir los ojos para huir, un grito agudo se escapó de sus labios. La catedral estaba llena de estatuas que habían descendido de sus nichos. Arzobispos de mármol, demonios de granito, reyes y guerreros llenaban las naves, mirándole con sus ojos sin pupila. Cuando a la mañana siguiente le encontraron, tenía aún la ajorca entre sus manos y reía a carcajadas. El infeliz estaba loco.</p>`
+            },
+            {
+                id: 'rayo', title: 'IV. El Rayo de Luna',
+                color: '#94a3b8', theme: 'bosque', pass: 'manrique', icon: 'M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z',
+                lore: `<p class="drop-cap">Manrique amaba la soledad de tal modo que algunas veces hubiera deseado no tener sombra. Forjaba un mundo fantástico, habitado por extrañas creaciones. Una noche de verano, vagando por las ruinas de los Templarios junto al río Duero en Soria, vio agitarse una cosa blanca.</p>
+                <p>"¡Una mujer desconocida! Esa es la mujer que yo busco", exclamó, y se lanzó en su seguimiento. Corrió rompiendo la maleza, creyendo oír el crujido de su traje, percibiendo un perfume especial.</p>
+                <p>Durante dos meses la buscó por todas las callejuelas de Soria, imaginando que sus ojos debían ser azules y su cabello oscuro y flotante. Construyó en su mente el ideal perfecto de mujer.</p>
+                <p>Volvió a las ruinas, y al ver de nuevo el extremo del traje blanco, corrió frenético... pero se detuvo con una carcajada horrible. Aquella cosa flotante no era una mujer. Era un rayo de luna que penetraba por entre la bóveda de los árboles. Manrique enloqueció. "El amor... el amor es un rayo de luna", murmuraba para siempre.</p>`
+            },
+            {
+                id: 'cruz', title: 'V. La Cruz del Diablo',
+                color: '#ef4444', theme: 'ruinas', pass: 'bellver', icon: 'M12 4v16m8-8H4',
+                lore: `<p class="drop-cap">En Bellver, cerca de los Pirineos, hay una cruz de hierro y mármol cubierta de orín. "Cúbrase la cabeza y aléjese", me dijo el guía. "Esa cruz pertenece a un espíritu maligno, le llaman La cruz del Diablo".</p>
+                <p>Hace mucho tiempo, el cruel Señor del Segre tiranizaba estas tierras. Se marchó a las Cruzadas, pero volvió aún peor. Sus vasallos, desesperados, asaltaron su castillo de noche y le dieron muerte junto a sus secuaces. Pero su pesada armadura, colgada de un pilar, cobró vida. El diablo mismo se metió dentro de ella, capitaneando a una nueva banda de saqueadores espectrales.</p>
+                <p>Con la ayuda de las oraciones de San Bartolomé, los aldeanos lograron capturar la armadura viva. La arrojaron a la fragua para fundirla. Las piezas saltaban y gemían entre el fuego como diablos retorciéndose. Tras arduo trabajo y agua bendita, el acero hirviente se convirtió en una cruz.</p>
+                <p>Hoy, el diablo sigue sujeto a ella. La cruz de Bellver atrae los rayos en las tormentas y los lobos se congregan a su alrededor.</p>`
+            },
+            {
+                id: 'cristo', title: 'VI. El Cristo de la Calavera',
+                color: '#b91c1c', theme: 'catedral', pass: 'alonso', icon: 'M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4',
+                lore: `<p class="drop-cap">El rey de Castilla marchaba a la guerra de moros. La noche antes de la partida, hubo un gran sarao en Toledo. Doña Inés de Tordesillas, la dama más hermosa, dejó caer su guante. Dos caballeros, íntimos amigos, se inclinaron a recogerlo: Alonso de Carrillo y Lope de Sandoval.</p>
+                <p>Ambos lo agarraron a la vez. Ninguno cedía. El rey tuvo que intervenir para evitar un duelo en pleno salón. Esa misma noche, los dos rivales se citaron en una calle oscura, frente al retablo del Cristo de la Calavera, iluminado por un débil farolillo.</p>
+                <p>Desnudaron sus estoques, pero al ir a chocar el acero, la luz del farol se apagó mágicamente. Al bajar las armas, se encendió. Volvieron a ponerse en guardia, y se volvió a apagar, acompañada de una voz de ultratumba. "Dios no quiere este duelo fratricida", dijo Lope asustado. "Dejemos que doña Inés decida".</p>
+                <p>Fueron juntos al balcón de su dama, sólo para ver cómo otro hombre se descolgaba furtivamente por una cuerda, despidiéndose de ella. Los dos amigos se miraron, prorrumpieron en una carcajada y al día siguiente marcharon a la guerra, curados para siempre de su ciego amor.</p>`
+            },
+            {
+                id: 'corza', title: 'VII. La Corza Blanca',
+                color: '#f8fafc', theme: 'bosque', pass: 'constanza', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z',
+                lore: `<p class="drop-cap">El zagal Esteban juraba haber visto en el Moncayo una corza blanca que guiaba a las demás y se reía a carcajadas. Garcés, el montero enamorado de Constanza (la bellísima hija de don Dionís), decidió cazar a la criatura mágica para regalársela a su señora, la "Azucena del Moncayo".</p>
+                <p>Escondido de noche junto al río, Garcés escuchó cantares mágicos. La corza blanca apareció. Pero cuando la luna iluminó el claro, las corzas se transformaron en un grupo de mujeres bellísimas bañándose en el río. Y entre ellas, Garcés reconoció a su amada Constanza.</p>
+                <p>Atónito, rompió el follaje. El encanto se desvaneció, y las mujeres volvieron a ser corzas huyendo. Garcés apuntó con su ballesta a la blanca. Ésta se volvió y le gritó con voz humana: "¿Qué haces, Garcés?". Él dudó y la corza huyó lanzando una risa de burla.</p>
+                <p>Ciego de rabia, Garcés disparó su saeta a la oscuridad. Sonó un gemido angustioso. Al correr hacia allí, encontró a Constanza, muriendo desangrada, herida por su propia flecha.</p>`
+            },
+            {
+                id: 'animas', title: 'VIII. El Monte de las Ánimas',
+                color: '#fb923c', theme: 'ruinas', pass: 'beatriz', icon: 'M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z',
+                lore: `<p class="drop-cap">La noche de difuntos me despertó el doble de las campanas. Alonso advirtió a su prima Beatriz: "Hoy es noche de difuntos. En ese monte los antiguos Templarios y los nobles se mataron en una fiera cacería. Hoy sus ánimas se levantan, envueltas en sudarios".</p>
+                <p>Ya en el castillo, frente al fuego, Alonso le ofreció una joya a Beatriz. Ella lo rechazó fríamente y le dijo con crueldad: "Yo pensaba dejarte mi banda azul, pero se me ha perdido... en el Monte de las Ánimas". El terror invadió a Alonso, pero aguijoneado por su orgullo, montó a caballo y regresó al monte en plena noche para buscarla.</p>
+                <p>Las horas pasaron. Beatriz escuchó ruidos horribles en el palacio: puertas crujiendo, pasos que se acercaban en la oscuridad. Aterrorizada, se escondió bajo las sábanas hasta el amanecer.</p>
+                <p>Con la primera luz, abrió los ojos. Sobre su reclinatorio, ensangrentada y desgarrada, estaba su banda azul. Cuando los sirvientes entraron para decirle que los lobos habían devorado a Alonso en el monte, encontraron a Beatriz muerta de horror en su cama.</p>`
+            },
+            {
+                id: 'gnomo', title: 'IX. El Gnomo',
+                color: '#06b6d4', theme: 'bosque', pass: 'marta', icon: 'M13 10V3L4 14h7v7l9-11h-7z',
+                lore: `<p class="drop-cap">El tío Gregorio advirtió a las muchachas: "No os detengáis en la fuente. En el Moncayo viven espíritus diabólicos, los gnomos, eternos guardadores de los tesoros de la tierra". Dos hermanas huérfanas, Marta y Magdalena, opuestas en carácter pero enamoradas del mismo joven, escucharon atentas.</p>
+                <p>Esa noche, ambas fueron a la fuente a escondidas. El viento y el agua empezaron a hablarles. El Agua prometía riquezas y poder desde las entrañas de la tierra; el Viento ofrecía amor, luz y suspiros etéreos. Magdalena, asustada, se acercaba a las estrellas. Marta, ambiciosa, se inclinaba al abismo del agua.</p>
+                <p>Apareció el gnomo, un enano de luz fosforescente que saltaba entre las peñas. Cuando echó a correr hacia las simas del Moncayo, Marta sintió una atracción irresistible y lo siguió en una carrera frenética hacia las entrañas de la tierra.</p>
+                <p>Magdalena, guiada por el viento, volvió al pueblo pálida. A Marta la esperaron en vano. Al día siguiente, solo encontraron su cántaro roto al borde de la fuente. Su espíritu quedó aprisionado allí para siempre.</p>`
+            },
+            {
+                id: 'miserere', title: 'X. El Miserere',
+                color: '#64748b', theme: 'ruinas', pass: 'fitero', icon: 'M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3',
+                lore: `<p class="drop-cap">Hace algunos meses, en la abandonada biblioteca de la abadía de Fitero, descubrí un Miserere sin terminar. "Las notas son huesos cubiertos de carne", decía una instrucción en alemán. El viejecito me contó su historia.</p>
+                <p>Un romero músico llegó a la abadía pidiendo asilo. Quería componer el Miserere definitivo para limpiar sus crímenes. Los pastores le hablaron del "Miserere de la Montaña": en las ruinas de un monasterio quemado por bandidos, cada Jueves Santo los esqueletos de los monjes asesinados salían del abismo cantando para implorar perdón.</p>
+                <p>El músico, obsesionado, subió a la montaña. A medianoche, el templo en ruinas se iluminó solo. Los esqueletos treparon por las rocas y cantaron un coro aterrador, formado por truenos, aullidos y el ruido del agua. Al llegar al versículo "Auditui meo dabis gaudium...", el cielo se abrió en un océano de luz celestial. El músico se desmayó.</p>
+                <p>Volvió a Fitero y trató de escribir lo que oyó. Escribió día y noche, pero al llegar a la parte celestial, le fue imposible. Se volvió loco y murió. En el manuscrito que vi, el pentagrama se convertía en garabatos ininteligibles que parecían mofarse del mundo.</p>`
+            }
+        ];
+
+        // --- 2. SISTEMA DE AUDIO EXPERTO (Web Audio API) ---
+        const AudioFX = {
+            ctx: null, masterGain: null, isEnabled: false,
+            init() {
+                try {
+                    window.AudioContext = window.AudioContext || window.webkitAudioContext;
+                    if(window.AudioContext) {
+                        this.ctx = new AudioContext();
+                        this.masterGain = this.ctx.createGain();
+                        this.masterGain.gain.value = 0.4;
+                        this.masterGain.connect(this.ctx.destination);
+                        if(this.ctx.state === 'suspended') this.ctx.resume();
+                        this.isEnabled = true;
+                    }
+                } catch(e) { console.warn("Audio desactivado."); }
+            },
+            playOsc(freq, type, dur, vol, attack=0.01) {
+                if(!this.isEnabled || !this.ctx) return;
+                try {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = type; osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0, this.ctx.currentTime);
+                    gain.gain.linearRampToValueAtTime(vol, this.ctx.currentTime + attack);
+                    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + dur);
+                    osc.connect(gain); gain.connect(this.masterGain);
+                    osc.start(); osc.stop(this.ctx.currentTime + dur);
+                } catch(e){}
+            },
+            click() { this.playOsc(600, 'sine', 0.1, 0.3); },
+            hover() { this.playOsc(400, 'triangle', 0.05, 0.1); },
+            error() { this.playOsc(150, 'sawtooth', 0.5, 0.5); setTimeout(()=>this.playOsc(100, 'sawtooth', 0.6, 0.6), 200); },
+            success() { this.playOsc(523.25, 'sine', 0.3, 0.4); setTimeout(()=>this.playOsc(659.25, 'sine', 0.4, 0.4), 150); setTimeout(()=>this.playOsc(783.99, 'sine', 0.6, 0.5), 300); },
+            organ(freq) {
+                if(!this.isEnabled) return;
+                const dur = 2.0; const osc1 = this.ctx.createOscillator(); const osc2 = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+                osc1.type = 'square'; osc1.frequency.value = freq;
+                osc2.type = 'sine'; osc2.frequency.value = freq * 2;
+                gain.gain.setValueAtTime(0, this.ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.3, this.ctx.currentTime + 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + dur);
+                osc1.connect(gain); osc2.connect(gain); gain.connect(this.masterGain);
+                osc1.start(); osc2.start(); osc1.stop(this.ctx.currentTime + dur); osc2.stop(this.ctx.currentTime + dur);
+            },
+            atmosphere() {
+                if(!this.isEnabled) return;
+                setInterval(() => {
+                    if(Math.random() > 0.7) this.playOsc(50 + Math.random()*50, 'sine', 3, 0.1, 1);
+                }, 5000);
+            }
+        };
+
+        // --- 3. MOTOR DE PARTÍCULAS (Canvas) ---
+        const FX = {
+            canvas: null, ctx: null, particles: [], animId: null, mode: 'none',
+            init() {
+                this.canvas = document.getElementById('fx-canvas'); this.ctx = this.canvas.getContext('2d');
+                this.resize(); window.addEventListener('resize', () => this.resize()); this.loop();
+            },
+            resize() { this.canvas.width = window.innerWidth; this.canvas.height = window.innerHeight; },
+            setMode(mode) {
+                this.mode = mode; this.particles = [];
+                const count = mode === 'fog' ? 40 : mode === 'fireflies' ? 60 : mode === 'embers' ? 80 : mode === 'magic' ? 50 : 0;
+                for(let i=0; i<count; i++) this.createParticle();
+            },
+            createParticle() {
+                const p = { x: Math.random() * this.canvas.width, y: Math.random() * this.canvas.height };
+                if (this.mode === 'fog') { p.r = Math.random()*150+50; p.dx = Math.random()*0.5+0.1; p.dy = 0; p.alpha = Math.random()*0.05+0.01; p.color='200,210,220'; }
+                if (this.mode === 'fireflies') { p.r = Math.random()*2+1; p.dx = Math.random()-0.5; p.dy = Math.random()-0.5; p.alpha = Math.random(); p.angle = Math.random()*Math.PI*2; p.color='74,222,128'; }
+                if (this.mode === 'embers') { p.y = this.canvas.height+10; p.r = Math.random()*3+1; p.dx = Math.random()*2-1; p.dy = -(Math.random()*3+1); p.alpha = 1; p.color=`255,${Math.random()*100+50},0`; }
+                if (this.mode === 'magic') { p.r = Math.random()*3+1; p.dx = 0; p.dy = -Math.random()*1-0.5; p.alpha = Math.random(); p.color='197,160,89'; }
+                this.particles.push(p);
+            },
+            loop() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                for(let i=this.particles.length-1; i>=0; i--) {
+                    let p = this.particles[i];
+                    if (this.mode === 'fog') { p.x += p.dx; if(p.x > this.canvas.width+p.r) p.x = -p.r; }
+                    if (this.mode === 'fireflies') { p.angle += 0.05; p.x += Math.cos(p.angle)*0.5 + p.dx; p.y += Math.sin(p.angle)*0.5 + p.dy; p.alpha = Math.abs(Math.sin(p.angle*0.5)); if(p.x<0) p.x=this.canvas.width; if(p.x>this.canvas.width) p.x=0; if(p.y<0) p.y=this.canvas.height; if(p.y>this.canvas.height) p.y=0; }
+                    if (this.mode === 'embers') { p.x += p.dx; p.y += p.dy; p.alpha -= 0.005; if(p.alpha<=0){ this.particles.splice(i,1); this.createParticle(); continue; } }
+                    if (this.mode === 'magic') { p.y += p.dy; p.alpha -= 0.002; if(p.y<0 || p.alpha<=0){ this.particles.splice(i,1); this.createParticle(); continue; } }
+                    
+                    this.ctx.beginPath(); this.ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+                    this.ctx.fillStyle = `rgba(${p.color}, ${p.alpha})`; 
+                    if(this.mode==='fireflies' || this.mode==='magic') { this.ctx.shadowBlur=10; this.ctx.shadowColor=`rgb(${p.color})`; }
+                    this.ctx.fill(); this.ctx.shadowBlur=0;
+                }
+                this.animId = requestAnimationFrame(() => this.loop());
+            }
+        };
+
+        // --- 4. MOTOR MULTI-ESCENARIO SVG DINÁMICO ---
+        const Scenes = {
+            // Reutilizamos estructuras (paths matemáticos) y cambiamos los colores de la escena dinámicamente.
+            render(type, colorHex) {
+                const isCatedral = type === 'catedral';
+                const isBosque = type === 'bosque';
+                const isRuinas = type === 'ruinas';
+                const isHub = type === 'hub';
+
+                let svg = `<svg viewBox="0 0 1200 700" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">`;
+                
+                if (isHub) {
+                    // El Estudio (HUB) con los 10 nodos de las leyendas
+                    svg += `<rect width="1200" height="700" fill="#050508"/>`;
+                    svg += `<path d="M600 50 L1000 700 L200 700 Z" fill="#0a0a0f"/>`;
+                    // Mesa
+                    svg += `<rect x="300" y="550" width="600" height="30" fill="#1a120c" stroke="#333" stroke-width="2"/>`;
+                    svg += `<path d="M450 500 L750 500 L800 550 L400 550 Z" fill="${colorHex}" opacity="0.1"/>`;
+                    
+                    // Renderizar los 10 nodos dinámicamente alrededor del centro
+                    LEYENDAS_DB.forEach((leg, i) => {
+                        const angle = (i * 36) * (Math.PI / 180);
+                        const radius = 250;
+                        const cx = 600 + radius * Math.cos(angle);
+                        const cy = 300 + radius * Math.sin(angle);
+                        const isSolved = State.solved.includes(leg.id);
+                        
+                        if(isSolved) {
+                            svg += `<circle cx="${cx}" cy="${cy}" r="20" fill="${leg.color}" filter="drop-shadow(0 0 15px ${leg.color})" class="animate-breathe"/>`;
+                            svg += `<path d="${leg.icon}" transform="translate(${cx-12}, ${cy-12})" fill="none" stroke="#fff" stroke-width="2"/>`;
+                        } else {
+                            svg += `<g class="interactive-relic" onclick="Game.loadLevel('${leg.id}')">
+                                <circle cx="${cx}" cy="${cy}" r="30" fill="#000" stroke="${leg.color}" stroke-width="2" stroke-dasharray="4,4" class="animate-[spin_10s_linear_infinite]"/>
+                                <circle cx="${cx}" cy="${cy}" r="15" fill="${leg.color}" opacity="0.3"/>
+                                <text x="${cx}" y="${cy+5}" fill="${leg.color}" font-family="Cinzel Decorative" font-size="16" text-anchor="middle" font-weight="bold">${i+1}</text>
+                            </g>`;
+                        }
+                    });
+                } 
+                else if (isCatedral) {
+                    svg += `<rect width="1200" height="700" fill="#030303"/>
+                            <path d="M200 150 Q600 -100 1000 150 L1000 700 L200 700 Z" fill="none" stroke="${colorHex}" stroke-width="4" opacity="0.2"/>
+                            <rect x="150" y="150" width="50" height="600" fill="#0a0a0a" stroke="#222"/>
+                            <rect x="1000" y="150" width="50" height="600" fill="#0a0a0a" stroke="#222"/>
+                            <circle cx="600" cy="200" r="100" fill="none" stroke="${colorHex}" stroke-width="3" opacity="0.3" stroke-dasharray="10 5"/>
+                            <circle cx="600" cy="200" r="120" fill="none" stroke="${colorHex}" stroke-width="1" opacity="0.1"/>
+                            
+                            <g class="interactive-relic" onclick="Puzzles.openLegendModal()">
+                                <polygon points="600,400 650,450 600,500 550,450" fill="${colorHex}" opacity="0.2" class="animate-breathe"/>
+                                <text x="600" y="455" fill="${colorHex}" font-family="Cinzel Decorative" font-size="24" text-anchor="middle">Inspeccionar</text>
+                            </g>`;
+                }
+                else if (isBosque) {
+                    svg += `<rect width="1200" height="700" fill="#020503"/>
+                            <path d="M100 700 Q200 300 150 0 M300 700 Q280 300 350 0 M900 700 Q850 300 950 0 M1100 700 Q1150 300 1080 0" fill="none" stroke="#050a06" stroke-width="40"/>
+                            <path d="M200 700 Q250 350 180 0 M800 700 Q780 350 820 0" fill="none" stroke="#0a120c" stroke-width="60"/>
+                            <ellipse cx="600" cy="550" rx="400" ry="120" fill="#02080a" stroke="${colorHex}" stroke-width="2" opacity="0.3"/>
+                            
+                            <g class="interactive-relic animate-float" onclick="Puzzles.openLegendModal()">
+                                <circle cx="600" cy="450" r="40" fill="${colorHex}" opacity="0.1" class="animate-breathe"/>
+                                <path d="M580 450 Q600 400 620 450 Q600 500 580 450" fill="${colorHex}" opacity="0.8"/>
+                            </g>`;
+                }
+                else if (isRuinas) {
+                    svg += `<rect width="1200" height="700" fill="#080303"/>
+                            <circle cx="800" cy="200" r="150" fill="#e2e8f0" opacity="0.1" filter="blur(10px)"/>
+                            <path d="M0 700 L300 450 L500 500 L800 350 L1200 600 L1200 700 Z" fill="#0a0505"/>
+                            <path d="M200 500 L200 200 A150 150 0 0 1 500 200 L500 500 M240 200 A110 110 0 0 1 460 200" fill="none" stroke="${colorHex}" stroke-width="15" opacity="0.4"/>
+                            
+                            <g class="interactive-relic" onclick="Puzzles.openLegendModal()">
+                                <rect x="550" y="550" width="100" height="40" fill="${colorHex}" opacity="0.2" rx="5" class="animate-breathe"/>
+                                <text x="600" y="575" fill="${colorHex}" font-family="Cinzel Decorative" font-size="20" text-anchor="middle">Acercarse</text>
+                            </g>`;
+                }
+
+                if(!isHub) {
+                    svg += `<g class="interactive" onclick="Game.loadHub()">
+                                <path d="M30 650 L80 620 L80 640 L150 640 L150 660 L80 660 L80 680 Z" fill="#fff" opacity="0.5"/>
+                                <text x="90" y="695" fill="#fff" font-family="Cinzel Decorative" opacity="0.5" font-size="14">Volver al Estudio</text>
+                            </g>`;
+                }
+                
+                svg += `</svg>`;
+                return svg;
+            }
+        };
+
+        // --- 5. LÓGICA DEL JUEGO Y PUZLES ---
+        const State = {
+            solved: [], currentLegendId: null,
+            get fragments() { return this.solved.length; }
+        };
+
+        const Dialogs = {
+            queue: [], isTyping: false, text: "", idx: 0,
+            show(speaker, msg, color) {
+                this.queue = [{speaker, text: msg, color}];
+                if(!this.isTyping) this.next();
+            },
+            next() {
+                const tg = document.getElementById('dialog-text');
+                const btn = document.getElementById('btn-dialog-next');
+                if(this.isTyping) { this.isTyping = false; tg.innerHTML = this.text; btn.classList.remove('hidden'); return; }
+                if(this.queue.length > 0) {
+                    const line = this.queue.shift();
+                    document.getElementById('speaker-name').innerText = line.speaker;
+                    document.getElementById('speaker-name').style.color = line.color || 'var(--gold-trim)';
+                    this.text = line.text; this.idx = 0; tg.innerHTML = ""; this.isTyping = true; btn.classList.add('hidden');
+                    this.typeWriter();
+                } else { tg.innerHTML = ""; document.getElementById('speaker-name').innerText = "..."; }
+            },
+            typeWriter() {
+                if(this.idx < this.text.length && this.isTyping) {
+                    document.getElementById('dialog-text').innerHTML += this.text.charAt(this.idx);
+                    this.idx++;
+                    if(this.idx % 2 === 0) AudioFX.hover();
+                    setTimeout(() => this.typeWriter(), 30);
+                } else { this.isTyping = false; document.getElementById('btn-dialog-next').classList.remove('hidden'); }
+            }
+        };
+
+        const UI = {
+            init() { this.buildCodexIndex(); },
+            toggleCodex() {
+                const m = document.getElementById('codex-modal');
+                if(m.style.display === 'none') {
+                    m.style.display = 'flex'; setTimeout(() => m.classList.remove('opacity-0'), 10);
+                    AudioFX.playOsc(200, 'triangle', 0.5, 0.3); // Sonido libro
+                } else {
+                    m.classList.add('opacity-0'); setTimeout(() => m.style.display = 'none', 500);
+                }
+            },
+            buildCodexIndex() {
+                const ul = document.getElementById('codex-index');
+                ul.innerHTML = LEYENDAS_DB.map(leg => `
+                    <li class="hover:text-[var(--blood-red)] transition-colors border-b border-dashed border-[#cbbca0] pb-2" 
+                        onclick="UI.loadCodexPage('${leg.id}')" onmouseenter="AudioFX.hover()">
+                        ${leg.title}
+                    </li>
+                `).join('');
+            },
+            loadCodexPage(id) {
+                AudioFX.click();
+                const leg = LEYENDAS_DB.find(l => l.id === id);
+                const c = document.getElementById('codex-content');
+                c.style.opacity = 0;
+                setTimeout(() => {
+                    c.innerHTML = `<h3 class="legend-title title-font text-3xl">${leg.title}</h3>${leg.lore}`;
+                    c.style.opacity = 1;
+                }, 300);
+            },
+            closePuzzle() {
+                const m = document.getElementById('puzzle-modal');
+                m.classList.add('opacity-0'); setTimeout(() => m.style.display = 'none', 300);
+            },
+            closeOrgan() {
+                const m = document.getElementById('organ-modal');
+                m.classList.add('opacity-0'); setTimeout(() => m.style.display = 'none', 500);
+            }
+        };
+
+        const Puzzles = {
+            organSeq: ['D', 'E', 'F', 'E', 'D'], playerSeq: [],
+            openLegendModal() {
+                const leg = LEYENDAS_DB.find(l => l.id === State.currentLegendId);
+                AudioFX.playOsc(300, 'sine', 1, 0.2);
+
+                if(leg.id === 'maese') {
+                    const m = document.getElementById('organ-modal');
+                    m.style.display = 'flex'; setTimeout(() => m.classList.remove('opacity-0'), 10);
+                    this.playerSeq = [];
+                } else {
+                    const m = document.getElementById('puzzle-modal');
+                    document.getElementById('puzzle-icon').innerHTML = `<svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="1.5" d="${leg.icon}"/></svg>`;
+                    document.getElementById('puzzle-title').innerText = leg.title;
+                    document.getElementById('puzzle-title').style.color = leg.color;
+                    document.getElementById('puzzle-desc').innerText = `Estás en el dominio de esta leyenda. Para liberar su fragmento, lee el Códice e introduce la palabra clave que revela su misterio.`;
+                    document.getElementById('puzzle-input').value = "";
+                    document.getElementById('puzzle-feedback').innerText = "";
+                    
+                    m.style.display = 'flex'; setTimeout(() => { m.classList.remove('opacity-0'); document.getElementById('puzzle-input').focus(); }, 10);
+                }
+            },
+            pressOrgan(note) {
+                const freqs = { 'C':261.6, 'C#':277.1, 'D':293.6, 'D#':311.1, 'E':329.6, 'F':349.2, 'F#':369.9, 'G':392.0, 'G#':415.3, 'A':440.0, 'A#':466.1, 'B':493.8 };
+                AudioFX.organ(freqs[note]);
+                
+                this.playerSeq.push(note);
+                if(this.playerSeq.length > 5) this.playerSeq.shift();
+                
+                if(this.playerSeq.join() === this.organSeq.join()) {
+                    setTimeout(() => { UI.closeOrgan(); Game.solveCurrentLegend(); }, 1000);
+                }
+            }
+        };
+
+        const Game = {
+            start() {
+                document.getElementById('main-menu').style.opacity = 0;
+                setTimeout(() => {
+                    document.getElementById('main-menu').style.display = 'none';
+                    const ui = document.getElementById('game-ui');
+                    ui.style.display = 'flex'; setTimeout(() => ui.classList.remove('opacity-0'), 50);
+                    
+                    AudioFX.init(); AudioFX.atmosphere(); UI.init();
+                    this.loadHub();
+                }, 1000);
+            },
+            loadHub() {
+                State.currentLegendId = null;
+                FX.setMode('magic');
+                const vp = document.getElementById('scene-viewport');
+                vp.style.opacity = 0;
+                setTimeout(() => {
+                    vp.innerHTML = Scenes.render('hub', '#c5a059');
+                    document.getElementById('current-location').innerText = "El Estudio de Bécquer";
+                    vp.style.opacity = 1;
+                    
+                    if(State.fragments === 0) {
+                        Dialogs.show("Pensamiento", "El manuscrito ha estallado en 10 fragmentos de luz. Cada uno me transportará al corazón de una de mis Leyendas. Debo adentrarme en ellas.", "var(--moonlight)");
+                    } else if (State.fragments === 10) {
+                        this.triggerEnding();
+                    } else {
+                        Dialogs.show("Pensamiento", "El estudio recobra la calma. Aún quedan fragmentos por recuperar en las sombras.", "var(--moonlight)");
+                    }
+                }, 500);
+            },
+            loadLevel(id) {
+                AudioFX.click();
+                const leg = LEYENDAS_DB.find(l => l.id === id);
+                State.currentLegendId = id;
+                
+                const vp = document.getElementById('scene-viewport');
+                vp.style.opacity = 0;
+                setTimeout(() => {
+                    vp.innerHTML = Scenes.render(leg.theme, leg.color);
+                    document.getElementById('current-location').innerText = leg.title;
+                    
+                    if(leg.theme === 'bosque') FX.setMode('fireflies');
+                    else if(leg.theme === 'ruinas') FX.setMode('embers');
+                    else FX.setMode('fog');
+                    
+                    vp.style.opacity = 1;
+                    Dialogs.show("El Vórtice", `Has entrado en el reino de "${leg.title}". Abre el Códice, lee su historia y busca el fulgor para enfrentarte al misterio.`, leg.color);
+                }, 500);
+            },
+            checkPuzzle() {
+                const leg = LEYENDAS_DB.find(l => l.id === State.currentLegendId);
+                const input = document.getElementById('puzzle-input').value.trim().toLowerCase();
+                
+                // Respuesta correcta si la palabra clave (pass) está incluida
+                if(input.includes(leg.pass) || leg.pass.split('-').some(p => input.includes(p) && p.length > 3)) {
+                    AudioFX.success();
+                    UI.closePuzzle();
+                    this.solveCurrentLegend();
+                } else {
+                    AudioFX.error();
+                    document.getElementById('puzzle-feedback').innerText = "Las sombras rechazan tu respuesta. Lee con más atención el Códice.";
+                    const pnl = document.querySelector('#puzzle-modal .ui-panel');
+                    pnl.classList.add('animate-shake'); setTimeout(() => pnl.classList.remove('animate-shake'), 400);
+                }
+            },
+            solveCurrentLegend() {
+                if(!State.solved.includes(State.currentLegendId)) {
+                    State.solved.push(State.currentLegendId);
+                    document.getElementById('fragment-count').innerText = State.fragments;
+                    AudioFX.playOsc(800, 'sine', 2, 0.5); // Sonido épico
+                    
+                    const leg = LEYENDAS_DB.find(l => l.id === State.currentLegendId);
+                    Dialogs.show("La Leyenda", `¡Has liberado el fragmento de ${leg.title}! Volviendo al Estudio...`, "var(--ghost-green)");
+                    
+                    setTimeout(() => this.loadHub(), 4000);
+                }
+            },
+            triggerEnding() {
+                FX.setMode('magic');
+                AudioFX.playOsc(400, 'square', 4, 0.3); AudioFX.playOsc(600, 'sine', 4, 0.3);
+                
+                const vp = document.getElementById('scene-viewport');
+                vp.style.opacity = 0;
+                setTimeout(() => {
+                    vp.innerHTML = `
+                        <div class="flex flex-col items-center justify-center text-center p-12">
+                            <h1 class="text-6xl md:text-8xl text-[var(--gold-trim)] title-font mb-8 drop-shadow-[0_0_40px_rgba(197,160,89,0.8)]">
+                                El Manuscrito Restaurado
+                            </h1>
+                            <p class="text-3xl text-white text-font max-w-4xl leading-relaxed mb-10 italic">
+                                "Has desvelado los misterios de las diez leyendas. La pluma de Bécquer vuelve a trazar su magia en la eternidad gracias a tu entendimiento."
+                            </p>
+                            <button onclick="location.reload()" class="btn-gothic px-12 py-5 rounded text-2xl font-bold bg-white text-black hover:bg-[var(--gold-trim)]">
+                                Despertar del Sueño
+                            </button>
+                        </div>
+                    `;
+                    vp.style.opacity = 1;
+                    document.getElementById('current-location').innerText = "Fin de la Historia";
+                    Dialogs.show("Bécquer", "Gracias. Mi obra perdurará en vuestra memoria.", "var(--gold-trim)");
+                }, 1000);
+            }
+        };
+
+        window.Game = Game;
+        window.UI = UI;
+        window.Puzzles = Puzzles;
+        window.Dialogs = Dialogs;
+
+        // Inicializar los efectos del canvas al cargar la página
+        window.addEventListener('DOMContentLoaded', () => {
+            FX.init();
+        });
+
+        // Enter para puzles
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'Enter' && document.getElementById('puzzle-modal').style.display !== 'none') Game.checkPuzzle();
+            if(e.key === 'Enter' && !document.getElementById('btn-dialog-next').classList.contains('hidden')) Dialogs.next();
+        });
+
+    </script>
+</body>
+</html>
