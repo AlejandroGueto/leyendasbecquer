@@ -87,6 +87,15 @@
         .drop-cap::first-letter { font-size: 3.8em; float: left; margin: 0.1em 0.15em 0 0; line-height: 0.8; font-family: 'Cinzel Decorative'; color: var(--blood-red); text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
         .legend-title { color: #5c1e1e; border-bottom: 2px solid #8B4513; padding-bottom: 10px; margin-bottom: 20px; text-align: center; }
 
+        /* Textos invocados dinámicamente desde Wikisource */
+        .wiki-content { font-family: 'Crimson Text', serif; font-size: 1.15rem; line-height: 1.6; color: #2c241b; }
+        @media (min-width: 768px) { .wiki-content { font-size: 1.35rem; } }
+        .wiki-content p { margin-bottom: 1.2em; text-align: justify; }
+        .wiki-content h2, .wiki-content h3 { font-family: 'Cinzel Decorative', serif; color: #5c1e1e; border-bottom: 1px solid #8B4513; margin-top: 1.5em; padding-bottom: 0.2em; font-size: 1.8rem; }
+        .wiki-content .mw-editsection, .wiki-content .infobox, .wiki-content .navbox, .wiki-content .mw-empty-elt, .wiki-content table { display: none !important; }
+        .wiki-content a { color: #8a0303; text-decoration: none; pointer-events: none; }
+        .wiki-content .mw-parser-output > p:first-of-type::first-letter { font-size: 3.5em; float: left; margin: 0.1em 0.1em 0 0; line-height: 0.8; font-family: 'Cinzel Decorative'; color: #8a0303; }
+
         .gothic-input {
             background: transparent; border: none; border-bottom: 2px solid var(--blood-red);
             color: var(--moonlight); font-family: 'Cinzel Decorative'; font-size: 1.5rem;
@@ -130,7 +139,7 @@
             </button>
             <div class="mt-8 flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3 text-gray-500 font-sans tracking-widest uppercase text-xs md:text-sm text-center">
                 <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" class="inline-block"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
-                Auriculares recomendados · Experiencia inmersiva para Bachillerato
+                Auriculares recomendados · Textos 100% íntegros invocados por red
             </div>
         </div>
     </div>
@@ -260,92 +269,58 @@
 
     <!-- ================= JAVASCRIPT: MOTOR DEL JUEGO ================= -->
     <script>
-        // --- 1. BASE DE DATOS LITERARIA (Las 10 Leyendas ÍNTEGRAS) ---
+        // --- 1. BASE DE DATOS LITERARIA ---
+        // Contiene el lore resumido de emergencia y el ID para invocar la API de Wikisource.
         const LEYENDAS_DB = [
             {
-                id: 'maese', title: 'I. Maese Pérez el Organista',
+                id: 'maese', title: 'I. Maese Pérez el Organista', wiki: 'Maese_Pérez_el_organista',
                 color: '#b89050', theme: 'catedral', pass: 're-mi-fa-mi-re', icon: 'M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3',
-                lore: `<p class="drop-cap">En Sevilla, en el mismo atrio de Santa Inés, y mientras esperaba que comenzase la Misa del Gallo, oí esta tradición a una demandadera del convento. Nada menos prodigioso que el órgano de Santa Inés, ni nada más vulgar que los insulsos motetes que nos regaló su organista aquella noche. Al salir, le dije: "¿En qué consiste que el órgano de maese Pérez suena ahora tan mal?". Y me contestó: "En que ese no es el suyo... Se cayó a pedazos hace años. Y el alma del organista no ha vuelto a parecer."</p>
-                <p>Nadie tocaba como el anciano y ciego Maese Pérez. Sus notas eran voces de ángeles. Murió en Nochebuena, tocando. Al año siguiente, cuando un organista envidioso (un tal bisojo de San Román) intentó sustituirle, el órgano sonó solo. El espíritu de Maese Pérez había vuelto a sus teclas.</p>
-                <div class="p-4 md:p-6 border border-[#8B4513] my-4 md:my-6 bg-black/5 text-center">
-                    <p class="font-bold text-[#660000] text-xl md:text-2xl mb-2">La Melodía Oculta</p>
-                    <p class="italic">"Dicen las monjas que para invocar su música, el teclado exige un rezo en cinco notas. Empieza y termina en la misma tumba (Re), sube buscando la luz (Mi, Fa), y vuelve a descender (Mi, Re)."</p>
-                </div>
-                <p>Cuando la hija de maese Pérez acudió asustada al coro al año siguiente, juró haber visto a su padre ciego, de espaldas, recorriendo las teclas. El arzobispo quedó atónito. El milagro se había consumado.</p>`
+                lore: `<p>En Sevilla, en el mismo atrio de Santa Inés...</p>`
             },
             {
-                id: 'ojos', title: 'II. Los Ojos Verdes',
+                id: 'ojos', title: 'II. Los Ojos Verdes', wiki: 'Los_ojos_verdes',
                 color: '#4ade80', theme: 'bosque', pass: 'fernando', icon: 'M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z',
-                lore: `<p class="drop-cap">Herido va el ciervo... herido va; no hay duda. Se ve el rastro de la sangre entre las zarzas del monte. Nuestro joven señor comienza por donde otros acaban... Pero, ¡por San Saturio!, cortadle el paso, ¿no veis que se dirige hacia la fuente de los álamos; y si la salva podemos darle por perdido?</p>
-                <p>—Señor —murmuró Íñigo el montero mayor—, es imposible pasar. Esa trocha conduce a la fuente de los Álamos, en cuyas aguas habita un espíritu del mal. Pieza que se refugia allí, pieza perdida.</p>
-                <p>—¡Pieza perdida! Primero perderé el ánima en manos de Satanás que dejar escapar ese ciervo. ¡Sus, Relámpago, caballo mío!</p>
-                <p>Fernando de Argensola, el primogénito de Almenar, desoyó los consejos. Días después, andaba mustio y sombrío. Confesó a Íñigo que en la fuente creyó ver unos ojos. "Unos ojos de un color imposible... verdes".</p>
-                <p>—¡Verdes! —exclamó Íñigo aterrorizado—. El demonio que habita en sus aguas tiene los ojos de ese color. ¡No volváis!</p>
-                <p>Pero él volvió. La mujer del agua le habló: "Yo te amo, Fernando... yo vivo en el fondo de estas aguas... Ven, ven...". Fernando dio un paso al abismo, sintió unos brazos de hielo y cayó al agua con un rumor sordo y lúgubre.</p>`
+                lore: `<p>Herido va el ciervo... herido va; no hay duda...</p>`
             },
             {
-                id: 'ajorca', title: 'III. La Ajorca de Oro',
+                id: 'ajorca', title: 'III. La Ajorca de Oro', wiki: 'La_ajorca_de_oro',
                 color: '#eab308', theme: 'catedral', pass: 'sagrario', icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z',
-                lore: `<p class="drop-cap">Ella era hermosa, hermosa con esa hermosura que inspira el vértigo; hermosura diabólica. Él la amaba con ese amor que no conoce freno ni límites. Ella se llamaba María Antúnez. Él, Pedro Alfonso de Orellana. Los dos eran toledanos.</p>
-                <p>Él la encontró un día llorando. "Ayer estuve en el templo", dijo ella. "Mis ojos se fijaron en la ajorca de oro que tiene la Madre de Dios en el brazo... la deseo, no he podido dormir". Pedro oprimió el puño de su espada: "¿Qué Virgen tiene esa presea?". "¡La del Sagrario de la Catedral!", murmuró María.</p>
-                <p>Pedro juró arrancársela, aunque le costase la condenación. La Catedral de Toledo, inmensa, sombría, enigmática. Entró de noche, sigilosamente. Trepó por el ara hasta la imagen iluminada débilmente. Arrancó la ajorca de oro.</p>
-                <p>Pero al abrir los ojos para huir, un grito agudo se escapó de sus labios. La catedral estaba llena de estatuas que habían descendido de sus nichos. Arzobispos de mármol, demonios de granito, reyes y guerreros llenaban las naves, mirándole con sus ojos sin pupila. Cuando a la mañana siguiente le encontraron, tenía aún la ajorca entre sus manos y reía a carcajadas. El infeliz estaba loco.</p>`
+                lore: `<p>Ella era hermosa, hermosa con esa hermosura que inspira el vértigo...</p>`
             },
             {
-                id: 'rayo', title: 'IV. El Rayo de Luna',
+                id: 'rayo', title: 'IV. El Rayo de Luna', wiki: 'El_rayo_de_luna',
                 color: '#94a3b8', theme: 'bosque', pass: 'manrique', icon: 'M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z',
-                lore: `<p class="drop-cap">Manrique amaba la soledad de tal modo que algunas veces hubiera deseado no tener sombra. Forjaba un mundo fantástico, habitado por extrañas creaciones. Una noche de verano, vagando por las ruinas de los Templarios junto al río Duero en Soria, vio agitarse una cosa blanca.</p>
-                <p>"¡Una mujer desconocida! Esa es la mujer que yo busco", exclamó, y se lanzó en su seguimiento. Corrió rompiendo la maleza, creyendo oír el crujido de su traje, percibiendo un perfume especial.</p>
-                <p>Durante dos meses la buscó por todas las callejuelas de Soria, imaginando que sus ojos debían ser azules y su cabello oscuro y flotante. Construyó en su mente el ideal perfecto de mujer.</p>
-                <p>Volvió a las ruinas, y al ver de nuevo el extremo del traje blanco, corrió frenético... pero se detuvo con una carcajada horrible. Aquella cosa flotante no era una mujer. Era un rayo de luna que penetraba por entre la bóveda de los árboles. Manrique enloqueció. "El amor... el amor es un rayo de luna", murmuraba para siempre.</p>`
+                lore: `<p>Manrique amaba la soledad de tal modo que algunas veces hubiera deseado no tener sombra...</p>`
             },
             {
-                id: 'cruz', title: 'V. La Cruz del Diablo',
+                id: 'cruz', title: 'V. La Cruz del Diablo', wiki: 'La_cruz_del_diablo',
                 color: '#ef4444', theme: 'ruinas', pass: 'bellver', icon: 'M12 4v16m8-8H4',
-                lore: `<p class="drop-cap">En Bellver, cerca de los Pirineos, hay una cruz de hierro y mármol cubierta de orín. "Cúbrase la cabeza y aléjese", me dijo el guía. "Esa cruz pertenece a un espíritu maligno, le llaman La cruz del Diablo".</p>
-                <p>Hace mucho tiempo, el cruel Señor del Segre tiranizaba estas tierras. Se marchó a las Cruzadas, pero volvió aún peor. Sus vasallos, desesperados, asaltaron su castillo de noche y le dieron muerte junto a sus secuaces. Pero su pesada armadura, colgada de un pilar, cobró vida. El diablo mismo se metió dentro de ella, capitaneando a una nueva banda de saqueadores espectrales.</p>
-                <p>Con la ayuda de las oraciones de San Bartolomé, los aldeanos lograron capturar la armadura viva. La arrojaron a la fragua para fundirla. Las piezas saltaban y gemían entre el fuego como diablos retorciéndose. Tras arduo trabajo y agua bendita, el acero hirviente se convirtió en una cruz.</p>
-                <p>Hoy, el diablo sigue sujeto a ella. La cruz de Bellver atrae los rayos en las tormentas y los lobos se congregan a su alrededor.</p>`
+                lore: `<p>En Bellver, cerca de los Pirineos, hay una cruz de hierro y mármol cubierta de orín...</p>`
             },
             {
-                id: 'cristo', title: 'VI. El Cristo de la Calavera',
+                id: 'cristo', title: 'VI. El Cristo de la Calavera', wiki: 'El_Cristo_de_la_calavera',
                 color: '#b91c1c', theme: 'catedral', pass: 'alonso', icon: 'M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4',
-                lore: `<p class="drop-cap">El rey de Castilla marchaba a la guerra de moros. La noche antes de la partida, hubo un gran sarao en Toledo. Doña Inés de Tordesillas, la dama más hermosa, dejó caer su guante. Dos caballeros, íntimos amigos, se inclinaron a recogerlo: Alonso de Carrillo y Lope de Sandoval.</p>
-                <p>Ambos lo agarraron a la vez. Ninguno cedía. El rey tuvo que intervenir para evitar un duelo en pleno salón. Esa misma noche, los dos rivales se citaron en una calle oscura, frente al retablo del Cristo de la Calavera, iluminado por un débil farolillo.</p>
-                <p>Desnudaron sus estoques, pero al ir a chocar el acero, la luz del farol se apagó mágicamente. Al bajar las armas, se encendió. Volvieron a ponerse en guardia, y se volvió a apagar, acompañada de una voz de ultratumba. "Dios no quiere este duelo fratricida", dijo Lope asustado. "Dejemos que doña Inés decida".</p>
-                <p>Fueron juntos al balcón de su dama, sólo para ver cómo otro hombre se descolgaba furtivamente por una cuerda, despidiéndose de ella. Los dos amigos se miraron, prorrumpieron en una carcajada y al día siguiente marcharon a la guerra, curados para siempre de su ciego amor.</p>`
+                lore: `<p>El rey de Castilla marchaba a la guerra de moros...</p>`
             },
             {
-                id: 'corza', title: 'VII. La Corza Blanca',
+                id: 'corza', title: 'VII. La Corza Blanca', wiki: 'La_corza_blanca',
                 color: '#f8fafc', theme: 'bosque', pass: 'constanza', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z',
-                lore: `<p class="drop-cap">El zagal Esteban juraba haber visto en el Moncayo una corza blanca que guiaba a las demás y se reía a carcajadas. Garcés, el montero enamorado de Constanza (la bellísima hija de don Dionís), decidió cazar a la criatura mágica para regalársela a su señora, la "Azucena del Moncayo".</p>
-                <p>Escondido de noche junto al río, Garcés escuchó cantares mágicos. La corza blanca apareció. Pero cuando la luna iluminó el claro, las corzas se transformaron en un grupo de mujeres bellísimas bañándose en el río. Y entre ellas, Garcés reconoció a su amada Constanza.</p>
-                <p>Atónito, rompió el follaje. El encanto se desvaneció, y las mujeres volvieron a ser corzas huyendo. Garcés apuntó con su ballesta a la blanca. Ésta se volvió y le gritó con voz humana: "¿Qué haces, Garcés?". Él dudó y la corza huyó lanzando una risa de burla.</p>
-                <p>Ciego de rabia, Garcés disparó su saeta a la oscuridad. Sonó un gemido angustioso. Al correr hacia allí, encontró a Constanza, muriendo desangrada, herida por su propia flecha.</p>`
+                lore: `<p>El zagal Esteban juraba haber visto en el Moncayo una corza blanca que guiaba a las demás...</p>`
             },
             {
-                id: 'animas', title: 'VIII. El Monte de las Ánimas',
+                id: 'animas', title: 'VIII. El Monte de las Ánimas', wiki: 'El_monte_de_las_ánimas',
                 color: '#fb923c', theme: 'ruinas', pass: 'beatriz', icon: 'M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z',
-                lore: `<p class="drop-cap">La noche de difuntos me despertó el doble de las campanas. Alonso advirtió a su prima Beatriz: "Hoy es noche de difuntos. En ese monte los antiguos Templarios y los nobles se mataron en una fiera cacería. Hoy sus ánimas se levantan, envueltas en sudarios".</p>
-                <p>Ya en el castillo, frente al fuego, Alonso le ofreció una joya a Beatriz. Ella lo rechazó fríamente y le dijo con crueldad: "Yo pensaba dejarte mi banda azul, pero se me ha perdido... en el Monte de las Ánimas". El terror invadió a Alonso, pero aguijoneado por su orgullo, montó a caballo y regresó al monte en plena noche para buscarla.</p>
-                <p>Las horas pasaron. Beatriz escuchó ruidos horribles en el palacio: puertas crujiendo, pasos que se acercaban en la oscuridad. Aterrorizada, se escondió bajo las sábanas hasta el amanecer.</p>
-                <p>Con la primera luz, abrió los ojos. Sobre su reclinatorio, ensangrentada y desgarrada, estaba su banda azul. Cuando los sirvientes entraron para decirle que los lobos habían devorado a Alonso en el monte, encontraron a Beatriz muerta de horror en su cama.</p>`
+                lore: `<p>La noche de difuntos me despertó el doble de las campanas...</p>`
             },
             {
-                id: 'gnomo', title: 'IX. El Gnomo',
+                id: 'gnomo', title: 'IX. El Gnomo', wiki: 'El_gnomo',
                 color: '#06b6d4', theme: 'bosque', pass: 'marta', icon: 'M13 10V3L4 14h7v7l9-11h-7z',
-                lore: `<p class="drop-cap">El tío Gregorio advirtió a las muchachas: "No os detengáis en la fuente. En el Moncayo viven espíritus diabólicos, los gnomos, eternos guardadores de los tesoros de la tierra". Dos hermanas huérfanas, Marta y Magdalena, opuestas en carácter pero enamoradas del mismo joven, escucharon atentas.</p>
-                <p>Esa noche, ambas fueron a la fuente a escondidas. El viento y el agua empezaron a hablarles. El Agua prometía riquezas y poder desde las entrañas de la tierra; el Viento ofrecía amor, luz y suspiros etéreos. Magdalena, asustada, se acercaba a las estrellas. Marta, ambiciosa, se inclinaba al abismo del agua.</p>
-                <p>Apareció el gnomo, un enano de luz fosforescente que saltaba entre las peñas. Cuando echó a correr hacia las simas del Moncayo, Marta sintió una atracción irresistible y lo siguió en una carrera frenética hacia las entrañas de la tierra.</p>
-                <p>Magdalena, guiada por el viento, volvió al pueblo pálida. A Marta la esperaron en vano. Al día siguiente, solo encontraron su cántaro roto al borde de la fuente. Su espíritu quedó aprisionado allí para siempre.</p>`
+                lore: `<p>Las muchachas del lugar volvían de la fuente con sus cántaros...</p>`
             },
             {
-                id: 'miserere', title: 'X. El Miserere',
+                id: 'miserere', title: 'X. El Miserere', wiki: 'El_Miserere',
                 color: '#64748b', theme: 'ruinas', pass: 'fitero', icon: 'M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3',
-                lore: `<p class="drop-cap">Hace algunos meses, en la abandonada biblioteca de la abadía de Fitero, descubrí un Miserere sin terminar. "Las notas son huesos cubiertos de carne", decía una instrucción en alemán. El viejecito me contó su historia.</p>
-                <p>Un romero músico llegó a la abadía pidiendo asilo. Quería componer el Miserere definitivo para limpiar sus crímenes. Los pastores le hablaron del "Miserere de la Montaña": en las ruinas de un monasterio quemado por bandidos, cada Jueves Santo los esqueletos de los monjes asesinados salían del abismo cantando para implorar perdón.</p>
-                <p>El músico, obsesionado, subió a la montaña. A medianoche, el templo en ruinas se iluminó solo. Los esqueletos treparon por las rocas y cantaron un coro aterrador, formado por truenos, aullidos y el ruido del agua. Al llegar al versículo "Auditui meo dabis gaudium...", el cielo se abrió en un océano de luz celestial. El músico se desmayó.</p>
-                <p>Volvió a Fitero y trató de escribir lo que oyó. Escribió día y noche, pero al llegar a la parte celestial, le fue imposible. Se volvió loco y murió. En el manuscrito que vi, el pentagrama se convertía en garabatos ininteligibles que parecían mofarse del mundo.</p>`
+                lore: `<p>Hace algunos meses que visitando la célebre abadía de Fitero...</p>`
             }
         ];
 
@@ -406,7 +381,7 @@
             canvas: null, ctx: null, particles: [], animId: null, mode: 'none',
             init() {
                 this.canvas = document.getElementById('fx-canvas'); 
-                if(!this.canvas) return; // Prevent null error if not found
+                if(!this.canvas) return;
                 this.ctx = this.canvas.getContext('2d');
                 this.resize(); window.addEventListener('resize', () => this.resize()); this.loop();
             },
@@ -585,14 +560,56 @@
                     </li>
                 `).join('');
             },
-            loadCodexPage(id) {
+            async loadCodexPage(id) {
                 AudioFX.click();
                 const leg = LEYENDAS_DB.find(l => l.id === id);
                 const c = document.getElementById('codex-content');
                 c.style.opacity = 0;
-                setTimeout(() => {
-                    c.innerHTML = `<h3 class="legend-title title-font text-2xl md:text-3xl">${leg.title}</h3>${leg.lore}`;
+                
+                setTimeout(async () => {
+                    // Animación de carga mágica mientras conectamos a la API
+                    c.innerHTML = `
+                        <div class="h-full flex flex-col items-center justify-center opacity-70 mt-10">
+                            <svg class="w-16 h-16 md:w-24 md:h-24 mb-6 animate-[spin_2s_linear_infinite]" fill="none" stroke="#8B4513" viewBox="0 0 24 24"><path stroke-width="1.5" stroke-linecap="round" d="M12 4v16m-8-8h16M4 4h16v16H4z"/></svg>
+                            <h3 class="title-font text-xl md:text-3xl text-center text-[#8B4513]">Invocando el texto íntegro desde el éter...</h3>
+                        </div>`;
                     c.style.opacity = 1;
+
+                    try {
+                        // Conexión en tiempo real a Wikisource para obtener el texto 100% completo e inalterado
+                        const url = `https://es.wikisource.org/w/api.php?action=parse&page=${encodeURIComponent(leg.wiki)}&format=json&origin=*`;
+                        const response = await fetch(url);
+                        const data = await response.json();
+                        
+                        if (data && data.parse && data.parse.text) {
+                            let html = data.parse.text['*'];
+                            
+                            // Añadimos la pista del órgano si es la leyenda de Maese Pérez
+                            let extraClue = "";
+                            if (leg.id === 'maese') {
+                                extraClue = `
+                                <div class="p-4 md:p-6 border border-[#8B4513] my-4 md:my-6 bg-[#8B4513] bg-opacity-10 text-center rounded">
+                                    <p class="font-bold text-[#660000] text-xl md:text-2xl mb-2">La Melodía Oculta</p>
+                                    <p class="italic text-black font-bold">"Dicen las monjas que para invocar su música, el teclado exige un rezo en cinco notas. Empieza y termina en la misma tumba (Re), sube buscando la luz (Mi, Fa), y vuelve a descender (Mi, Re)."</p>
+                                </div>`;
+                            }
+
+                            c.style.opacity = 0;
+                            setTimeout(() => {
+                                c.innerHTML = `<h3 class="legend-title title-font text-3xl md:text-5xl">${leg.title}</h3>${extraClue}<div class="wiki-content">${html}</div>`;
+                                c.style.opacity = 1;
+                            }, 300);
+                        } else {
+                            throw new Error("No wiki data found");
+                        }
+                    } catch(e) {
+                        // Fallback por si la conexión del colegio bloquea la API
+                        c.style.opacity = 0;
+                        setTimeout(() => {
+                            c.innerHTML = `<h3 class="legend-title title-font text-3xl md:text-5xl">${leg.title}</h3>${leg.lore}<br><div class="p-4 border-2 border-red-800 bg-red-100 text-red-900 mt-6 text-center text-sm md:text-base"><b>Aviso mágico:</b> No se pudieron invocar los textos íntegros desde el éter de internet. Mostrando los fragmentos rescatados de emergencia.</div>`;
+                            c.style.opacity = 1;
+                        }, 300);
+                    }
                 }, 300);
             },
             closePuzzle() {
